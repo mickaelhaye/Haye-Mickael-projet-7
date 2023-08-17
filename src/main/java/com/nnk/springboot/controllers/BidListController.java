@@ -1,6 +1,6 @@
 package com.nnk.springboot.controllers;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,7 +9,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.nnk.springboot.domain.BidList;
 import com.nnk.springboot.services.BidListService;
@@ -19,7 +18,7 @@ public class BidListController {
 	@Autowired
 	private BidListService bidListService;
 
-	@RequestMapping("/bidList/list")
+	@GetMapping("/bidList/list")
 	public String home(Model model) {
 		model.addAttribute("bidLists", bidListService.getBidLists());
 		return "bidList/list";
@@ -37,20 +36,20 @@ public class BidListController {
 	}
 
 	@GetMapping("/bidList/update/{id}")
-	public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
+	public String showUpdateForm(@PathVariable Integer id, Model model) {
 		// TODO: get Bid by Id and to model then show to the form
 		return "bidList/update";
 	}
 
 	@PostMapping("/bidList/update/{id}")
-	public String updateBid(@PathVariable("id") Integer id, @Valid BidList bidList, BindingResult result, Model model) {
+	public String updateBid(@PathVariable Integer id, @Valid BidList bidList, BindingResult result, Model model) {
 		// TODO: check required fields, if valid call service to update Bid and return
 		// list Bid
 		return "redirect:/bidList/list";
 	}
 
 	@GetMapping("/bidList/delete/{id}")
-	public String deleteBid(@PathVariable("id") Integer id, Model model) {
+	public String deleteBid(@PathVariable Integer id, Model model) {
 		// TODO: Find Bid by Id and delete the bid, return to Bid list
 		return "redirect:/bidList/list";
 	}
