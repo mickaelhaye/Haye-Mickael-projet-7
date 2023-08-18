@@ -4,12 +4,12 @@ import com.nnk.springboot.domain.CurvePoint;
 
 public interface CurvePointService {
 
-	Iterable<CurvePoint> getCurvePoints();
+	public Iterable<CurvePoint> getCurvePoints();
 
-	CurvePoint addCurvePoint(CurvePoint curvePoint);
+	public CurvePoint addCurvePoint(CurvePoint curvePoint);
 
-	CurvePoint getCurvePointById(Integer id) throws Exception;
+	public CurvePoint getCurvePointById(Integer id) throws Exception;
 
-	void delCurvePoint(CurvePoint curvePoint);
+	public void delCurvePoint(CurvePoint curvePoint);
 
 }
