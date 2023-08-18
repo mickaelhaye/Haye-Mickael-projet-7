@@ -26,14 +26,14 @@ public class Rating {
 	private int id;
 
 	@Column(name = "moodys_rating")
-	String moodysRating;
+	private String moodysRating;
 
 	@Column(name = "sand_p_rating")
-	String sandPRating;
+	private String sandPRating;
 
 	@Column(name = "fitch_rating")
-	String fitchRating;
+	private String fitchRating;
 
 	@Column(name = "order_number")
-	Integer order;
+	private Integer order;
 }
