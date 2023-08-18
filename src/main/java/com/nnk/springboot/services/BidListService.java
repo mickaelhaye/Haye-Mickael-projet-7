@@ -7,7 +7,7 @@ public interface BidListService {
 
 	public BidList addBidList(BidList bid);
 
-	public BidList getBidListById(Integer id);
+	public BidList getBidListById(Integer id) throws Exception;
 
 	public void delBidList(BidList bid);
 

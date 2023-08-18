@@ -1,7 +1,5 @@
 package com.nnk.springboot.services.impl;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +24,15 @@ public class BidListServiceImpl implements BidListService {
 	}
 
 	@Override
-	public BidList getBidListById(Integer id) {
-		Optional<BidList> bidOpt = bidListRepository.findById(id);
-		BidList bid = bidOpt.get();
+	public BidList getBidListById(Integer id) throws Exception {
+		/*
+		 * Optional<BidList> bidOpt = bidListRepository.findById(id); if
+		 * (!bidOpt.isPresent()) { throw new
+		 * IllegalArgumentException("Invalid BidList Id:" + id); } BidList bid =
+		 * bidOpt.get();
+		 */
+		BidList bid = bidListRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("Invalid BidList Id:" + id));
 		return bid;
 	}
 

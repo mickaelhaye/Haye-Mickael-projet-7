@@ -43,9 +43,18 @@ public class BidListController {
 	@GetMapping("/bidList/update/{id}")
 	public String showUpdateForm(@PathVariable Integer id, Model model) {
 		// TODO: get Bid by Id and to model then show to the form
-		BidList bid = bidListService.getBidListById(id);
-		model.addAttribute("bidList", bid);
-		return "bidList/update";
+		BidList bid;
+		try {
+			bid = bidListService.getBidListById(id);
+			model.addAttribute("bidList", bid);
+			return "bidList/update";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			model.addAttribute("bidLists", bidListService.getBidLists());
+			return "redirect:/bidList/list";
+		}
+
 	}
 
 	@PostMapping("/bidList/update/{id}")
@@ -64,9 +73,17 @@ public class BidListController {
 	@GetMapping("/bidList/delete/{id}")
 	public String deleteBid(@PathVariable Integer id, Model model) {
 		// TODO: Find Bid by Id and delete the bid, return to Bid list
-		BidList bid = bidListService.getBidListById(id);
-		bidListService.delBidList(bid);
-		model.addAttribute("bidLists", bidListService.getBidLists());
-		return "redirect:/bidList/list";
+		BidList bid;
+		try {
+			bid = bidListService.getBidListById(id);
+			bidListService.delBidList(bid);
+			model.addAttribute("bidLists", bidListService.getBidLists());
+			return "redirect:/bidList/list";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			model.addAttribute("bidLists", bidListService.getBidLists());
+			return "redirect:/bidList/list";
+		}
 	}
 }
