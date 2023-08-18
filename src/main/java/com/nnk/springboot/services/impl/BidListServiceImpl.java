@@ -25,12 +25,6 @@ public class BidListServiceImpl implements BidListService {
 
 	@Override
 	public BidList getBidListById(Integer id) throws Exception {
-		/*
-		 * Optional<BidList> bidOpt = bidListRepository.findById(id); if
-		 * (!bidOpt.isPresent()) { throw new
-		 * IllegalArgumentException("Invalid BidList Id:" + id); } BidList bid =
-		 * bidOpt.get();
-		 */
 		BidList bid = bidListRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid BidList Id:" + id));
 		return bid;
