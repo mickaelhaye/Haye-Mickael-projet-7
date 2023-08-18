@@ -1,5 +1,9 @@
 package com.nnk.springboot.repositories;
 
-public interface CurvePointRepository /* extends JpaRepository<CurvePoint, Integer> */ {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.nnk.springboot.domain.CurvePoint;
+
+public interface CurvePointRepository extends JpaRepository<CurvePoint, Integer> {
 
 }
