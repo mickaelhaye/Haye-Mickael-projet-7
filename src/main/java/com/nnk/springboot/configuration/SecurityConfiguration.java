@@ -33,6 +33,9 @@ public class SecurityConfiguration {
                         		.requestMatchers("/rating/*").permitAll()
                         		.requestMatchers("/rating/update/{id}").permitAll()
                         		.requestMatchers("/rating/delete/{id}").permitAll()
+                        		.requestMatchers("/ruleName/*").permitAll()
+                        		.requestMatchers("/ruleName/update/{id}").permitAll()
+                        		.requestMatchers("/ruleName/delete/{id}").permitAll()
                         		                           
                 )
                 .formLogin(withDefaults())
