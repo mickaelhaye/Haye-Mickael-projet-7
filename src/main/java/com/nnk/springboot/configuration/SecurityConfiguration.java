@@ -30,6 +30,9 @@ public class SecurityConfiguration {
                         		.requestMatchers("/curvePoint/*").permitAll()
                         		.requestMatchers("/curvePoint/update/{id}").permitAll()
                         		.requestMatchers("/curvePoint/delete/{id}").permitAll()
+                        		.requestMatchers("/rating/*").permitAll()
+                        		.requestMatchers("/rating/update/{id}").permitAll()
+                        		.requestMatchers("/rating/delete/{id}").permitAll()
                         		                           
                 )
                 .formLogin(withDefaults())
