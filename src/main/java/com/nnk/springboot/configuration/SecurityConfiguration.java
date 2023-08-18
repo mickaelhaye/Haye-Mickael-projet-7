@@ -27,6 +27,9 @@ public class SecurityConfiguration {
                         		.requestMatchers("/bidList/*").permitAll()
                         		.requestMatchers("/bidList/update/{id}").permitAll()
                         		.requestMatchers("/bidList/delete/{id}").permitAll()
+                        		.requestMatchers("/curvePoint/*").permitAll()
+                        		.requestMatchers("/curvePoint/update/{id}").permitAll()
+                        		.requestMatchers("/curvePoint/delete/{id}").permitAll()
                         		                           
                 )
                 .formLogin(withDefaults())
