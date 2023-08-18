@@ -2,6 +2,8 @@ package com.nnk.springboot.domain;
 
 import java.sql.Timestamp;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 //retirer au début à valider
 //import org.springframework.beans.factory.annotation.Required;
 import jakarta.persistence.Column;
@@ -10,9 +12,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
-import org.hibernate.annotations.DynamicUpdate;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,15 +26,15 @@ public class BidList {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "BidListId")
-	private int BidListId;
+	@Column(name = "bid_list_id")
+	private int bidListId;
 	@Column(name = "account")
 	private String account;
 	@Column(name = "type")
 	private String type;
-	@Column(name = "bidQuantity")
+	@Column(name = "bid_quantity")
 	private Double bidQuantity;
-	@Column(name = "askQuantity")
+	@Column(name = "ask_quantity")
 	private Double askQuantity;
 	@Column(name = "bid")
 	private Double bid;
@@ -43,7 +42,7 @@ public class BidList {
 	private Double ask;
 	@Column(name = "benchmark")
 	private String benchmark;
-	@Column(name = "bidListDate")
+	@Column(name = "bid_list_date")
 	private Timestamp bidListDate;
 	@Column(name = "commentary")
 	private String commentary;
@@ -55,19 +54,19 @@ public class BidList {
 	private String trader;
 	@Column(name = "book")
 	private String book;
-	@Column(name = "creationName")
+	@Column(name = "creation_name")
 	private String creationName;
-	@Column(name = "creationName")
+	@Column(name = "creation_date")
 	private Timestamp creationDate;
-	@Column(name = "revisionName")
+	@Column(name = "revision_name")
 	private String revisionName;
-	@Column(name = "revisionDate")
+	@Column(name = "revision_date")
 	private Timestamp revisionDate;
-	@Column(name = "dealName")
+	@Column(name = "deal_name")
 	private String dealName;
-	@Column(name = "dealType")
+	@Column(name = "deal_type")
 	private String dealType;
-	@Column(name = "sourceListId")
+	@Column(name = "source_list_id")
 	private String sourceListId;
 	@Column(name = "side")
 	private String side;
