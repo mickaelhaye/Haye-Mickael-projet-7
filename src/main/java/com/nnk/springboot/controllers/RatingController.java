@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.nnk.springboot.domain.Rating;
 import com.nnk.springboot.services.RatingService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @Controller
@@ -19,8 +20,9 @@ public class RatingController {
 	private RatingService ratingService;
 
 	@GetMapping("/rating/list")
-	public String home(Model model) {
+	public String home(Model model, HttpServletRequest httpServletRequest) {
 		model.addAttribute("ratings", ratingService.getRatings());
+		model.addAttribute("httpServletRequest", httpServletRequest);
 		return "rating/list";
 	}
 

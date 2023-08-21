@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.nnk.springboot.domain.BidList;
 import com.nnk.springboot.services.BidListService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @Controller
@@ -19,8 +20,9 @@ public class BidListController {
 	private BidListService bidListService;
 
 	@GetMapping("/bidList/list")
-	public String home(Model model) {
+	public String home(Model model, HttpServletRequest httpServletRequest) {
 		model.addAttribute("bidLists", bidListService.getBidLists());
+		model.addAttribute("httpServletRequest", httpServletRequest);
 		return "bidList/list";
 	}
 

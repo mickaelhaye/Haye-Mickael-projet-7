@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.nnk.springboot.domain.CurvePoint;
 import com.nnk.springboot.services.CurvePointService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @Controller
@@ -19,8 +20,9 @@ public class CurveController {
 	private CurvePointService curvePointService;
 
 	@GetMapping("/curvePoint/list")
-	public String home(Model model) {
+	public String home(Model model, HttpServletRequest httpServletRequest) {
 		model.addAttribute("curvePoints", curvePointService.getCurvePoints());
+		model.addAttribute("httpServletRequest", httpServletRequest);
 		return "curvePoint/list";
 	}
 
