@@ -39,6 +39,9 @@ public class SecurityConfiguration {
                         		.requestMatchers("/trade/*").permitAll()
                         		.requestMatchers("/trade/update/{id}").permitAll()
                         		.requestMatchers("/trade/delete/{id}").permitAll()
+                        		.requestMatchers("/user/*").permitAll()
+                        		.requestMatchers("/user/update/{id}").permitAll()
+                        		.requestMatchers("/user/delete/{id}").permitAll()
                         		                           
                 )
                 .formLogin(withDefaults())
