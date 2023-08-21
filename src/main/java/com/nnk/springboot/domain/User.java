@@ -1,60 +1,80 @@
 package com.nnk.springboot.domain;
 
-import jakarta.persistence.*;
+import java.util.Collection;
+import java.util.List;
+
+import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
+@DynamicUpdate
 @Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Integer id;
-    @NotBlank(message = "Username is mandatory")
-    private String username;
-    @NotBlank(message = "Password is mandatory")
-    private String password;
-    @NotBlank(message = "FullName is mandatory")
-    private String fullname;
-    @NotBlank(message = "Role is mandatory")
-    private String role;
+public class User implements UserDetails {
 
-    public Integer getId() {
-        return id;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
+	private Integer id;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	@NotBlank(message = "Username is mandatory")
+	@Column(name = "username")
+	private String username;
 
-    public String getUsername() {
-        return username;
-    }
+	@NotBlank(message = "Password is mandatory")
+	@Column(name = "password")
+	private String password;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	@NotBlank(message = "FullName is mandatory")
+	@Column(name = "fullname")
+	private String fullname;
 
-    public String getPassword() {
-        return password;
-    }
+	@NotBlank(message = "Role is mandatory")
+	@Column(name = "role")
+	private String role = "ROLE_USER";
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority(role));
+	}
 
-    public String getFullname() {
-        return fullname;
-    }
+	@Override
+	public String getUsername() {
+		return username;
+	}
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
 
-    public String getRole() {
-        return role;
-    }
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
 
-    public void setRole(String role) {
-        this.role = role;
-    }
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
 }
