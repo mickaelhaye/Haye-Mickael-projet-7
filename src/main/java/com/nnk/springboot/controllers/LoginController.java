@@ -6,14 +6,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.nnk.springboot.repositories.UserRepository;
+import com.nnk.springboot.services.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("app")
 public class LoginController {
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserService userService;
 
 	@GetMapping("login")
 	public ModelAndView login() {
@@ -22,19 +24,27 @@ public class LoginController {
 		return mav;
 	}
 
+	@GetMapping("logout")
+	public ModelAndView logout() {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("logout");
+		return mav;
+	}
+
 	@GetMapping("secure/article-details")
 	public ModelAndView getAllUserArticles() {
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("users", userRepository.findAll());
+		mav.addObject("users", userService.getUsers());
 		mav.setViewName("user/list");
 		return mav;
 	}
 
 	@GetMapping("error")
-	public ModelAndView error() {
+	public ModelAndView error(HttpServletRequest httpServletRequest) {
 		ModelAndView mav = new ModelAndView();
 		String errorMessage = "You are not authorized for the requested data.";
 		mav.addObject("errorMsg", errorMessage);
+		mav.addObject("httpServletRequest", httpServletRequest);
 		mav.setViewName("403");
 		return mav;
 	}
