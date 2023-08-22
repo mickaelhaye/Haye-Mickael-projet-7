@@ -15,6 +15,8 @@ import org.passay.PropertiesMessageResolver;
 import org.passay.RuleResult;
 import org.passay.WhitespaceRule;
 
+import com.nnk.springboot.annotation.ValidPassword;
+
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.SneakyThrows;
