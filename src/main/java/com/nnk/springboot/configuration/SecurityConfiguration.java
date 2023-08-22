@@ -2,7 +2,6 @@ package com.nnk.springboot.configuration;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,7 +21,7 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
-                        		.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                        		/*.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         		.requestMatchers("/*").permitAll()
                         		.requestMatchers("/admin/home").permitAll()
                         		.requestMatchers("/bidList/*").permitAll()
@@ -42,7 +41,9 @@ public class SecurityConfiguration {
                         		.requestMatchers("/trade/delete/{id}").permitAll()
                         		.requestMatchers("/user/*").permitAll()
                         		.requestMatchers("/user/update/{id}").permitAll()
-                        		.requestMatchers("/user/delete/{id}").permitAll()
+                        		.requestMatchers("/user/delete/{id}").permitAll()*/
+                        		.requestMatchers("/user/delete/{id}").hasRole("ADMIN")
+                        		.anyRequest().permitAll()
                         		                           
                 )
                 .formLogin(withDefaults())

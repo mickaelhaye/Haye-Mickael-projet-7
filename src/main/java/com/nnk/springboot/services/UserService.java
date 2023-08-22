@@ -12,4 +12,10 @@ public interface UserService {
 
 	public void delUser(User user);
 
+	public boolean getUserByUsername(String username);
+
+	public String getUserNameUpdating();
+
+	public void setUserNameUpdating(String userNameUpdating);
+
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.nnk.springboot.domain.User;
+import com.nnk.springboot.domain.dto.UserAddDto;
 import com.nnk.springboot.services.UserService;
 
 import jakarta.validation.Valid;
@@ -26,13 +27,16 @@ public class UserController {
 	}
 
 	@GetMapping("/user/add")
-	public String addUser(User bid) {
+	public String addUser(UserAddDto bid) {
+		userService.setUserNameUpdating("");
 		return "user/add";
 	}
 
 	@PostMapping("/user/validate")
-	public String validate(@Valid User user, BindingResult result, Model model) {
+	public String validate(@Valid UserAddDto userAddDto, BindingResult result, Model model) {
 		if (!result.hasErrors()) {
+			User user = new User(userAddDto.getId(), userAddDto.getUsername(), userAddDto.getPassword(),
+					userAddDto.getFullname(), userAddDto.getRole());
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			user.setPassword(encoder.encode(user.getPassword()));
 			userService.addUser(user);
@@ -48,8 +52,11 @@ public class UserController {
 		User user;
 		try {
 			user = userService.getUserById(id);
+			userService.setUserNameUpdating(user.getUsername());
 			user.setPassword("");
-			model.addAttribute("user", user);
+			UserAddDto userAddDto = new UserAddDto(user.getId(), user.getUsername(), user.getPassword(),
+					user.getFullname(), user.getRole());
+			model.addAttribute("userAddDto", userAddDto);
 			return "user/update";
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -60,10 +67,13 @@ public class UserController {
 	}
 
 	@PostMapping("/user/update/{id}")
-	public String updateUser(@PathVariable Integer id, @Valid User user, BindingResult result, Model model) {
+	public String updateUser(@PathVariable Integer id, @Valid UserAddDto userAddDto, BindingResult result,
+			Model model) {
 		if (result.hasErrors()) {
 			return "user/update";
 		}
+		User user = new User(userAddDto.getId(), userAddDto.getUsername(), userAddDto.getPassword(),
+				userAddDto.getFullname(), userAddDto.getRole());
 
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		user.setPassword(encoder.encode(user.getPassword()));

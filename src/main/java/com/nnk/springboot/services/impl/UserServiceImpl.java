@@ -1,5 +1,7 @@
 package com.nnk.springboot.services.impl;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,8 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	private String userNameUpdating;
 
 	@Override
 	public Iterable<User> getUsers() {
@@ -31,8 +35,28 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public boolean getUserByUsername(String username) {
+		Optional<User> user = userRepository.findByUsername(username);
+		if (user.isPresent()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
 	public void delUser(User user) {
 		userRepository.delete(user);
+	}
+
+	@Override
+	public String getUserNameUpdating() {
+		return userNameUpdating;
+	}
+
+	@Override
+	public void setUserNameUpdating(String userNameUpdating) {
+		this.userNameUpdating = userNameUpdating;
 	}
 
 }
