@@ -8,6 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.nnk.springboot.configuration.ValidPassword;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,6 +38,7 @@ public class User implements UserDetails {
 	@Column(name = "username")
 	private String username;
 
+	@ValidPassword
 	@NotBlank(message = "Password is mandatory")
 	@Column(name = "password")
 	private String password;
