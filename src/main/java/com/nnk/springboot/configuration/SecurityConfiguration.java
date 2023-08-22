@@ -24,6 +24,7 @@ public class SecurityConfiguration {
                         authorizeHttpRequests
                         		.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         		.requestMatchers("/*").permitAll()
+                        		.requestMatchers("/admin/home").permitAll()
                         		.requestMatchers("/bidList/*").permitAll()
                         		.requestMatchers("/bidList/update/{id}").permitAll()
                         		.requestMatchers("/bidList/delete/{id}").permitAll()
