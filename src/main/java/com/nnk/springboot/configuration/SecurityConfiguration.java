@@ -14,43 +14,35 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
-
+	//@formatter:off
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		//@formatter:off
-        http
-                .authorizeHttpRequests((authorizeHttpRequests) ->
-                        authorizeHttpRequests
-                        		/*.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        		.requestMatchers("/*").permitAll()
-                        		.requestMatchers("/admin/home").permitAll()
-                        		.requestMatchers("/bidList/*").permitAll()
-                        		.requestMatchers("/bidList/update/{id}").permitAll()
-                        		.requestMatchers("/bidList/delete/{id}").permitAll()
-                        		.requestMatchers("/curvePoint/*").permitAll()
-                        		.requestMatchers("/curvePoint/update/{id}").permitAll()
-                        		.requestMatchers("/curvePoint/delete/{id}").permitAll()
-                        		.requestMatchers("/rating/*").permitAll()
-                        		.requestMatchers("/rating/update/{id}").permitAll()
-                        		.requestMatchers("/rating/delete/{id}").permitAll()
-                        		.requestMatchers("/ruleName/*").permitAll()
-                        		.requestMatchers("/ruleName/update/{id}").permitAll()
-                        		.requestMatchers("/ruleName/delete/{id}").permitAll()
-                        		.requestMatchers("/trade/*").permitAll()
-                        		.requestMatchers("/trade/update/{id}").permitAll()
-                        		.requestMatchers("/trade/delete/{id}").permitAll()
-                        		.requestMatchers("/user/*").permitAll()
-                        		.requestMatchers("/user/update/{id}").permitAll()
-                        		.requestMatchers("/user/delete/{id}").permitAll()*/
-                        		.requestMatchers("/user/delete/{id}").hasRole("ADMIN")
-                        		.anyRequest().permitAll()
-                        		                           
-                )
-                .formLogin(withDefaults())
-                .rememberMe(withDefaults());
-               
- 					
-                
+		http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
+				 .requestMatchers("/bidList/*").authenticated()
+				 .requestMatchers("/bidList/update/{id}").authenticated()
+				 .requestMatchers("/bidList/delete/{id}").authenticated()
+				 .requestMatchers("/curvePoint/*").authenticated()
+				 .requestMatchers("/curvePoint/update/{id}").authenticated()
+				 .requestMatchers("/curvePoint/delete/{id}").authenticated()
+				 .requestMatchers("/rating/*").authenticated()
+				 .requestMatchers("/rating/update/{id}").authenticated()
+				 .requestMatchers("/rating/delete/{id}").authenticated()
+				 .requestMatchers("/ruleName/*").authenticated()
+				 .requestMatchers("/ruleName/update/{id}").authenticated()
+				 .requestMatchers("/ruleName/delete/{id}").authenticated()
+				 .requestMatchers("/trade/*").authenticated()
+				 .requestMatchers("/trade/update/{id}").authenticated()
+				 .requestMatchers("/trade/delete/{id}").authenticated()
+				 .requestMatchers("/user/*").permitAll()
+				 .requestMatchers("/user/update/{id}").authenticated()
+				 .requestMatchers("/user/delete/{id}").authenticated()
+		    	 .requestMatchers("/admin/home").hasRole("ADMIN")
+		    	 .anyRequest().permitAll()
+
+		)
+		.formLogin(withDefaults())
+		.exceptionHandling(handling -> handling.accessDeniedPage("/app/error"));
+
 		return http.build();
 		//@formatter:on
 
