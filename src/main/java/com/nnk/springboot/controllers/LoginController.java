@@ -24,10 +24,18 @@ public class LoginController {
 		return mav;
 	}
 
-	@GetMapping("logout")
-	public ModelAndView logout() {
+	@GetMapping("login_success")
+	public ModelAndView loginSuccess(HttpServletRequest httpServletRequest) {
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("logout");
+		mav.addObject("httpServletRequest", httpServletRequest);
+		mav.setViewName("login_success");
+		return mav;
+	}
+
+	@GetMapping("login_error")
+	public ModelAndView loginError() {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("login_error");
 		return mav;
 	}
 
