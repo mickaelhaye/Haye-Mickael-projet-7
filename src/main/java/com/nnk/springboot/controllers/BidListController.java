@@ -1,5 +1,7 @@
 package com.nnk.springboot.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +24,7 @@ import jakarta.validation.Valid;
  */
 @Controller
 public class BidListController {
+	private static Logger logger = LoggerFactory.getLogger(BidListController.class);
 	@Autowired
 	private BidListService bidListService;
 
@@ -34,8 +37,11 @@ public class BidListController {
 	 */
 	@GetMapping("/bidList/list")
 	public String home(Model model, HttpServletRequest httpServletRequest) {
+		logger.debug("home");
 		model.addAttribute("bidLists", bidListService.getBidLists());
 		model.addAttribute("httpServletRequest", httpServletRequest);
+		logger.info("bidList List: " + bidListService.getBidLists().toString() + "Remote user: "
+				+ httpServletRequest.getRemoteUser());
 		return "bidList/list";
 	}
 
@@ -47,6 +53,7 @@ public class BidListController {
 	 */
 	@GetMapping("/bidList/add")
 	public String addBidForm(BidList bid) {
+		logger.debug("addBidForm");
 		return "bidList/add";
 	}
 
@@ -61,8 +68,10 @@ public class BidListController {
 	 */
 	@PostMapping("/bidList/validate")
 	public String validate(@Valid BidList bid, BindingResult result, Model model) {
+		logger.debug("addBidForm");
 		if (!result.hasErrors()) {
 			bidListService.addBidList(bid);
+			logger.info("bidList added: " + bid.toString());
 			model.addAttribute("bidLists", bidListService.getBidLists());
 			return "redirect:/bidList/list";
 		}
@@ -79,13 +88,16 @@ public class BidListController {
 	 */
 	@GetMapping("/bidList/update/{id}")
 	public String showUpdateForm(@PathVariable Integer id, Model model) {
+		logger.debug("showUpdateForm");
 		BidList bid;
 		try {
 			bid = bidListService.getBidListById(id);
 			model.addAttribute("bidList", bid);
+			logger.info("bidList update: " + bid.toString());
 			return "bidList/update";
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("showUpdateForm" + e);
 			model.addAttribute("bidLists", bidListService.getBidLists());
 			return "redirect:/bidList/list";
 		}
@@ -104,11 +116,13 @@ public class BidListController {
 	 */
 	@PostMapping("/bidList/update/{id}")
 	public String updateBid(@PathVariable Integer id, @Valid BidList bidList, BindingResult result, Model model) {
+		logger.debug("updateBid");
 		if (result.hasErrors()) {
 			return "bidList/update";
 		}
 		bidList.setBidListId(id);
 		bidListService.addBidList(bidList);
+		logger.info("bidList update: " + bidList.toString());
 		model.addAttribute("bidLists", bidListService.getBidLists());
 		return "redirect:/bidList/list";
 	}
@@ -122,14 +136,17 @@ public class BidListController {
 	 */
 	@GetMapping("/bidList/delete/{id}")
 	public String deleteBid(@PathVariable Integer id, Model model) {
+		logger.debug("deleteBid");
 		BidList bid;
 		try {
 			bid = bidListService.getBidListById(id);
 			bidListService.delBidList(bid);
+			logger.info("bidList delete: " + bid.toString());
 			model.addAttribute("bidLists", bidListService.getBidLists());
 			return "redirect:/bidList/list";
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("deleteBid" + e);
 			model.addAttribute("bidLists", bidListService.getBidLists());
 			return "redirect:/bidList/list";
 		}

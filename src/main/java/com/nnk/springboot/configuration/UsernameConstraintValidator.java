@@ -1,5 +1,7 @@
 package com.nnk.springboot.configuration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.nnk.springboot.annotation.ValidUsername;
@@ -16,13 +18,14 @@ import lombok.SneakyThrows;
  * @version 1.0
  */
 public class UsernameConstraintValidator implements ConstraintValidator<ValidUsername, String> {
+	private static Logger logger = LoggerFactory.getLogger(UsernameConstraintValidator.class);
 
 	@Autowired
 	UserService userService;
 
 	@Override
 	public void initialize(final ValidUsername arg0) {
-
+		logger.debug("initialize");
 	}
 
 	/**
@@ -31,7 +34,7 @@ public class UsernameConstraintValidator implements ConstraintValidator<ValidUse
 	@SneakyThrows
 	@Override
 	public boolean isValid(String username, ConstraintValidatorContext context) {
-
+		logger.debug("isValid");
 		if (username.equals(userService.getUserNameUpdating())) {
 			return true;
 		}

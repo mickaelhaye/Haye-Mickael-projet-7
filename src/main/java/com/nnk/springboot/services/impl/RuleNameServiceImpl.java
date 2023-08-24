@@ -1,5 +1,7 @@
 package com.nnk.springboot.services.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +17,7 @@ import com.nnk.springboot.services.RuleNameService;
  */
 @Service
 public class RuleNameServiceImpl implements RuleNameService {
-
+	private static Logger logger = LoggerFactory.getLogger(RuleNameServiceImpl.class);
 	@Autowired
 	private RuleNameRepository ruleNameRepository;
 
@@ -26,6 +28,7 @@ public class RuleNameServiceImpl implements RuleNameService {
 	 */
 	@Override
 	public Iterable<RuleName> getRuleNames() {
+		logger.debug("getRuleNames");
 		return ruleNameRepository.findAll();
 	}
 
@@ -37,6 +40,7 @@ public class RuleNameServiceImpl implements RuleNameService {
 	 */
 	@Override
 	public RuleName addRuleName(RuleName ruleName) {
+		logger.debug("addRuleName");
 		return ruleNameRepository.save(ruleName);
 	}
 
@@ -49,6 +53,7 @@ public class RuleNameServiceImpl implements RuleNameService {
 	 */
 	@Override
 	public RuleName getRuleNameById(Integer id) throws Exception {
+		logger.debug("getRuleNameById");
 		RuleName ruleName = ruleNameRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid RuleName Id:" + id));
 		return ruleName;
@@ -61,6 +66,7 @@ public class RuleNameServiceImpl implements RuleNameService {
 	 */
 	@Override
 	public void delRuleName(RuleName ruleName) {
+		logger.debug("delRuleName");
 		ruleNameRepository.delete(ruleName);
 	}
 

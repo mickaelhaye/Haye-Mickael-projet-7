@@ -1,5 +1,7 @@
 package com.nnk.springboot.services.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +17,7 @@ import com.nnk.springboot.services.CurvePointService;
  */
 @Service
 public class CurvePointServiceImpl implements CurvePointService {
-
+	private static Logger logger = LoggerFactory.getLogger(CurvePointServiceImpl.class);
 	@Autowired
 	private CurvePointRepository curvePointRepository;
 
@@ -26,6 +28,7 @@ public class CurvePointServiceImpl implements CurvePointService {
 	 */
 	@Override
 	public Iterable<CurvePoint> getCurvePoints() {
+		logger.debug("getCurvePoints");
 		return curvePointRepository.findAll();
 	}
 
@@ -37,6 +40,7 @@ public class CurvePointServiceImpl implements CurvePointService {
 	 */
 	@Override
 	public CurvePoint addCurvePoint(CurvePoint curvePoint) {
+		logger.debug("addCurvePoint");
 		return curvePointRepository.save(curvePoint);
 	}
 
@@ -49,6 +53,7 @@ public class CurvePointServiceImpl implements CurvePointService {
 	 */
 	@Override
 	public CurvePoint getCurvePointById(Integer id) throws Exception {
+		logger.debug("getCurvePointById");
 		CurvePoint curvePoint = curvePointRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid CurvePoint Id:" + id));
 		return curvePoint;
@@ -61,6 +66,7 @@ public class CurvePointServiceImpl implements CurvePointService {
 	 */
 	@Override
 	public void delCurvePoint(CurvePoint curvePoint) {
+		logger.debug("delCurvePoint");
 		curvePointRepository.delete(curvePoint);
 	}
 

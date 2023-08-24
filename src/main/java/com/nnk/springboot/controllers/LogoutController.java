@@ -1,5 +1,7 @@
 package com.nnk.springboot.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class LogoutController {
+	private static Logger logger = LoggerFactory.getLogger(LogoutController.class);
 
 	/**
 	 * this endpoint is to display the success logout page.
@@ -19,7 +22,8 @@ public class LogoutController {
 	 * @return the url of the success logout page.
 	 */
 	@GetMapping("logout_success")
-	public ModelAndView loginSuccess() {
+	public ModelAndView logoutSuccess() {
+		logger.debug("loginSuccess");
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("logout_success");
 		return mav;

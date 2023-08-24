@@ -1,5 +1,7 @@
 package com.nnk.springboot.configuration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
+	private static Logger logger = LoggerFactory.getLogger(SecurityConfiguration.class);
 
 	/**
 	 * this method consists of managing the filter chain.
@@ -29,7 +32,8 @@ public class SecurityConfiguration {
 	//@formatter:off
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
+		logger.debug("securityFilterChain");
+		http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                 .requestMatchers("/bidList/*").authenticated()
                 .requestMatchers("/bidList/update/{id}").authenticated()
                 .requestMatchers("/bidList/delete/{id}").authenticated()

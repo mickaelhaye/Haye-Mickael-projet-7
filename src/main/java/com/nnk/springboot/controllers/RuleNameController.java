@@ -1,5 +1,7 @@
 package com.nnk.springboot.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +24,7 @@ import jakarta.validation.Valid;
  */
 @Controller
 public class RuleNameController {
+	private static Logger logger = LoggerFactory.getLogger(RuleNameController.class);
 	@Autowired
 	private RuleNameService ruleNameService;
 
@@ -34,8 +37,11 @@ public class RuleNameController {
 	 */
 	@GetMapping("/ruleName/list")
 	public String home(Model model, HttpServletRequest httpServletRequest) {
+		logger.debug("home");
 		model.addAttribute("ruleNames", ruleNameService.getRuleNames());
 		model.addAttribute("httpServletRequest", httpServletRequest);
+		logger.info("ruleNames List: " + ruleNameService.getRuleNames().toString() + "Remote user: "
+				+ httpServletRequest.getRemoteUser());
 		return "ruleName/list";
 	}
 
@@ -47,6 +53,7 @@ public class RuleNameController {
 	 */
 	@GetMapping("/ruleName/add")
 	public String addRuleNameForm(RuleName ruleName) {
+		logger.debug("addRuleNameForm");
 		return "ruleName/add";
 	}
 
@@ -61,8 +68,10 @@ public class RuleNameController {
 	 */
 	@PostMapping("/ruleName/validate")
 	public String validate(@Valid RuleName ruleName, BindingResult result, Model model) {
+		logger.debug("validate");
 		if (!result.hasErrors()) {
 			ruleNameService.addRuleName(ruleName);
+			logger.info("ruleName added: " + ruleName.toString());
 			model.addAttribute("ruleNames", ruleNameService.getRuleNames());
 			return "redirect:/ruleName/list";
 		}
@@ -79,13 +88,16 @@ public class RuleNameController {
 	 */
 	@GetMapping("/ruleName/update/{id}")
 	public String showUpdateForm(@PathVariable Integer id, Model model) {
+		logger.debug("showUpdateForm");
 		RuleName ruleName;
 		try {
 			ruleName = ruleNameService.getRuleNameById(id);
 			model.addAttribute("ruleName", ruleName);
+			logger.info("ruleName update: " + ruleName.toString());
 			return "ruleName/update";
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("showUpdateForm" + e);
 			model.addAttribute("ruleNames", ruleNameService.getRuleNames());
 			return "redirect:/ruleName/list";
 		}
@@ -104,11 +116,13 @@ public class RuleNameController {
 	@PostMapping("/ruleName/update/{id}")
 	public String updateRuleName(@PathVariable Integer id, @Valid RuleName ruleName, BindingResult result,
 			Model model) {
+		logger.debug("updateRuleName");
 		if (result.hasErrors()) {
 			return "ruleName/update";
 		}
 		ruleName.setId(id);
 		ruleNameService.addRuleName(ruleName);
+		logger.info("ruleName update: " + ruleName.toString());
 		model.addAttribute("ruleNames", ruleNameService.getRuleNames());
 		return "redirect:/ruleName/list";
 	}
@@ -122,15 +136,17 @@ public class RuleNameController {
 	 */
 	@GetMapping("/ruleName/delete/{id}")
 	public String deleteRuleName(@PathVariable Integer id, Model model) {
+		logger.debug("deleteRuleName");
 		RuleName ruleName;
 		try {
 			ruleName = ruleNameService.getRuleNameById(id);
 			ruleNameService.delRuleName(ruleName);
+			logger.info("ruleName delete: " + ruleName.toString());
 			model.addAttribute("ruleNames", ruleNameService.getRuleNames());
 			return "redirect:/ruleName/list";
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error("deleteRuleName" + e);
 			model.addAttribute("curvePoints", ruleNameService.getRuleNames());
 			return "redirect:/ruleName/list";
 		}

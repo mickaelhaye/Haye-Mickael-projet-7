@@ -2,6 +2,8 @@ package com.nnk.springboot.services.impl;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +19,7 @@ import com.nnk.springboot.services.UserService;
  */
 @Service
 public class UserServiceImpl implements UserService {
-
+	private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 	@Autowired
 	private UserRepository userRepository;
 
@@ -30,6 +32,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public Iterable<User> getUsers() {
+		logger.debug("getUsers");
 		return userRepository.findAll();
 	}
 
@@ -41,6 +44,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public User addUser(User user) {
+		logger.debug("addUser");
 		return userRepository.save(user);
 	}
 
@@ -53,6 +57,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public User getUserById(Integer id) throws Exception {
+		logger.debug("getUserById");
 		User user = userRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid User Id:" + id));
 		return user;
@@ -66,6 +71,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public boolean getUserByUsername(String username) {
+		logger.debug("getUserByUsername");
 		Optional<User> user = userRepository.findByUsername(username);
 		if (user.isPresent()) {
 			return true;
@@ -81,6 +87,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public void delUser(User user) {
+		logger.debug("delUser");
 		userRepository.delete(user);
 	}
 
@@ -91,6 +98,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public String getUserNameUpdating() {
+		logger.debug("getUserNameUpdating");
 		return userNameUpdating;
 	}
 
@@ -101,6 +109,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public void setUserNameUpdating(String userNameUpdating) {
+		logger.debug("setUserNameUpdating");
 		this.userNameUpdating = userNameUpdating;
 	}
 

@@ -1,5 +1,7 @@
 package com.nnk.springboot.services.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +17,7 @@ import com.nnk.springboot.services.BidListService;
  */
 @Service
 public class BidListServiceImpl implements BidListService {
-
+	private static Logger logger = LoggerFactory.getLogger(BidListServiceImpl.class);
 	@Autowired
 	private BidListRepository bidListRepository;
 
@@ -26,6 +28,7 @@ public class BidListServiceImpl implements BidListService {
 	 */
 	@Override
 	public Iterable<BidList> getBidLists() {
+		logger.debug("getBidLists");
 		return bidListRepository.findAll();
 	}
 
@@ -37,6 +40,7 @@ public class BidListServiceImpl implements BidListService {
 	 */
 	@Override
 	public BidList addBidList(BidList bid) {
+		logger.debug("addBidList");
 		return bidListRepository.save(bid);
 	}
 
@@ -49,6 +53,7 @@ public class BidListServiceImpl implements BidListService {
 	 */
 	@Override
 	public BidList getBidListById(Integer id) throws Exception {
+		logger.debug("getBidListById");
 		BidList bid = bidListRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid BidList Id:" + id));
 		return bid;
@@ -61,6 +66,7 @@ public class BidListServiceImpl implements BidListService {
 	 */
 	@Override
 	public void delBidList(BidList bid) {
+		logger.debug("delBidList");
 		bidListRepository.delete(bid);
 	}
 

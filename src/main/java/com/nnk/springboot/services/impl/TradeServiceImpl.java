@@ -1,5 +1,7 @@
 package com.nnk.springboot.services.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +17,7 @@ import com.nnk.springboot.services.TradeService;
  */
 @Service
 public class TradeServiceImpl implements TradeService {
-
+	private static Logger logger = LoggerFactory.getLogger(TradeServiceImpl.class);
 	@Autowired
 	private TradeRepository tradeRepository;
 
@@ -26,6 +28,7 @@ public class TradeServiceImpl implements TradeService {
 	 */
 	@Override
 	public Iterable<Trade> getTrades() {
+		logger.debug("getTrades");
 		return tradeRepository.findAll();
 	}
 
@@ -37,6 +40,7 @@ public class TradeServiceImpl implements TradeService {
 	 */
 	@Override
 	public Trade addTrade(Trade trade) {
+		logger.debug("addTrade");
 		return tradeRepository.save(trade);
 	}
 
@@ -49,6 +53,7 @@ public class TradeServiceImpl implements TradeService {
 	 */
 	@Override
 	public Trade getTradeById(Integer id) throws Exception {
+		logger.debug("getTradeById");
 		Trade trade = tradeRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid Trade Id:" + id));
 		return trade;
@@ -61,6 +66,7 @@ public class TradeServiceImpl implements TradeService {
 	 */
 	@Override
 	public void delTrade(Trade trade) {
+		logger.debug("delTrade");
 		tradeRepository.delete(trade);
 	}
 

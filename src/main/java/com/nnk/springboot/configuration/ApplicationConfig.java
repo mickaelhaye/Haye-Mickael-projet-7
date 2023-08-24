@@ -1,5 +1,7 @@
 package com.nnk.springboot.configuration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +29,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
+	private static Logger logger = LoggerFactory.getLogger(ApplicationConfig.class);
+
 	@Autowired
 	private UserRepository userRepository;
 
@@ -37,6 +41,7 @@ public class ApplicationConfig {
 	 */
 	@Bean
 	public UserDetailsService userDetailsService() {
+		logger.debug("userDetailsService");
 		return username -> userRepository.findByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
@@ -49,6 +54,7 @@ public class ApplicationConfig {
 	 */
 	@Bean
 	public AuthenticationProvider authenticationProvider() {
+		logger.debug("authenticationProvider");
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 		authProvider.setUserDetailsService(userDetailsService());
 		authProvider.setPasswordEncoder(passwordEncoder());
@@ -62,6 +68,7 @@ public class ApplicationConfig {
 	 */
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+		logger.debug("authenticationManager");
 		return config.getAuthenticationManager();
 	}
 
@@ -72,6 +79,7 @@ public class ApplicationConfig {
 	 */
 	@Bean
 	public PasswordEncoder passwordEncoder() {
+		logger.debug("");
 		return new BCryptPasswordEncoder();
 	}
 

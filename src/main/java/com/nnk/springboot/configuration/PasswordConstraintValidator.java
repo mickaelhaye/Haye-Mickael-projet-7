@@ -14,6 +14,8 @@ import org.passay.PasswordValidator;
 import org.passay.PropertiesMessageResolver;
 import org.passay.RuleResult;
 import org.passay.WhitespaceRule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.nnk.springboot.annotation.ValidPassword;
 
@@ -29,8 +31,11 @@ import lombok.SneakyThrows;
  */
 public class PasswordConstraintValidator implements ConstraintValidator<ValidPassword, String> {
 
+	private static Logger logger = LoggerFactory.getLogger(PasswordConstraintValidator.class);
+
 	@Override
 	public void initialize(final ValidPassword arg0) {
+		logger.debug("initialize");
 
 	}
 
@@ -41,7 +46,7 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
 	@SneakyThrows
 	@Override
 	public boolean isValid(String password, ConstraintValidatorContext context) {
-
+		logger.debug("isValid");
 		// customizing validation messages
 		Properties props = new Properties();
 		InputStream inputStream = getClass().getClassLoader().getResourceAsStream("passay.properties");

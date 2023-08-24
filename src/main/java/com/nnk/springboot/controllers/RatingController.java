@@ -1,5 +1,7 @@
 package com.nnk.springboot.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +24,7 @@ import jakarta.validation.Valid;
  */
 @Controller
 public class RatingController {
+	private static Logger logger = LoggerFactory.getLogger(RatingController.class);
 	@Autowired
 	private RatingService ratingService;
 
@@ -34,8 +37,11 @@ public class RatingController {
 	 */
 	@GetMapping("/rating/list")
 	public String home(Model model, HttpServletRequest httpServletRequest) {
+		logger.debug("home");
 		model.addAttribute("ratings", ratingService.getRatings());
 		model.addAttribute("httpServletRequest", httpServletRequest);
+		logger.info("rating List: " + ratingService.getRatings().toString() + "Remote user: "
+				+ httpServletRequest.getRemoteUser());
 		return "rating/list";
 	}
 
@@ -47,6 +53,7 @@ public class RatingController {
 	 */
 	@GetMapping("/rating/add")
 	public String addRatingForm(Rating rating) {
+		logger.debug("addRatingForm");
 		return "rating/add";
 	}
 
@@ -61,8 +68,10 @@ public class RatingController {
 	 */
 	@PostMapping("/rating/validate")
 	public String validate(@Valid Rating rating, BindingResult result, Model model) {
+		logger.debug("validate");
 		if (!result.hasErrors()) {
 			ratingService.addRating(rating);
+			logger.info("rating added: " + rating.toString());
 			model.addAttribute("ratings", ratingService.getRatings());
 			return "redirect:/rating/list";
 		}
@@ -79,13 +88,16 @@ public class RatingController {
 	 */
 	@GetMapping("/rating/update/{id}")
 	public String showUpdateForm(@PathVariable Integer id, Model model) {
+		logger.debug("showUpdateForm");
 		Rating rating;
 		try {
 			rating = ratingService.getRatingById(id);
 			model.addAttribute("rating", rating);
+			logger.info("rating update: " + rating.toString());
 			return "rating/update";
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("showUpdateForm" + e);
 			model.addAttribute("ratings", ratingService.getRatings());
 			return "redirect:/rating/list";
 		}
@@ -103,11 +115,13 @@ public class RatingController {
 	 */
 	@PostMapping("/rating/update/{id}")
 	public String updateRating(@PathVariable Integer id, @Valid Rating rating, BindingResult result, Model model) {
+		logger.debug("updateRating");
 		if (result.hasErrors()) {
 			return "rating/update";
 		}
 		rating.setId(id);
 		ratingService.addRating(rating);
+		logger.info("rating update: " + rating.toString());
 		model.addAttribute("ratings", ratingService.getRatings());
 		return "redirect:/rating/list";
 	}
@@ -121,14 +135,17 @@ public class RatingController {
 	 */
 	@GetMapping("/rating/delete/{id}")
 	public String deleteRating(@PathVariable Integer id, Model model) {
+		logger.debug("deleteRating");
 		Rating rating;
 		try {
 			rating = ratingService.getRatingById(id);
 			ratingService.delRating(rating);
+			logger.info("rating delete: " + rating.toString());
 			model.addAttribute("ratings", ratingService.getRatings());
 			return "redirect:/rating/list";
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("deleteRating" + e);
 			model.addAttribute("ratings", ratingService.getRatings());
 			return "redirect:/rating/list";
 		}

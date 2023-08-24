@@ -1,5 +1,7 @@
 package com.nnk.springboot.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +24,7 @@ import jakarta.validation.Valid;
  */
 @Controller
 public class CurveController {
+	private static Logger logger = LoggerFactory.getLogger(CurveController.class);
 	@Autowired
 	private CurvePointService curvePointService;
 
@@ -34,8 +37,11 @@ public class CurveController {
 	 */
 	@GetMapping("/curvePoint/list")
 	public String home(Model model, HttpServletRequest httpServletRequest) {
+		logger.debug("home");
 		model.addAttribute("curvePoints", curvePointService.getCurvePoints());
 		model.addAttribute("httpServletRequest", httpServletRequest);
+		logger.info("curvePoints List: " + curvePointService.getCurvePoints().toString() + "Remote user: "
+				+ httpServletRequest.getRemoteUser());
 		return "curvePoint/list";
 	}
 
@@ -47,6 +53,7 @@ public class CurveController {
 	 */
 	@GetMapping("/curvePoint/add")
 	public String addBidForm(CurvePoint bid) {
+		logger.debug("addBidForm");
 		return "curvePoint/add";
 	}
 
@@ -61,8 +68,10 @@ public class CurveController {
 	 */
 	@PostMapping("/curvePoint/validate")
 	public String validate(@Valid CurvePoint curvePoint, BindingResult result, Model model) {
+		logger.debug("validate");
 		if (!result.hasErrors()) {
 			curvePointService.addCurvePoint(curvePoint);
+			logger.info("curvePoint added: " + curvePoint.toString());
 			model.addAttribute("curvePoints", curvePointService.getCurvePoints());
 			return "redirect:/curvePoint/list";
 		}
@@ -79,13 +88,16 @@ public class CurveController {
 	 */
 	@GetMapping("/curvePoint/update/{id}")
 	public String showUpdateForm(@PathVariable Integer id, Model model) {
+		logger.debug("showUpdateForm");
 		CurvePoint curvePoint;
 		try {
 			curvePoint = curvePointService.getCurvePointById(id);
 			model.addAttribute("curvePoint", curvePoint);
+			logger.info("curvePoint update: " + curvePoint.toString());
 			return "curvePoint/update";
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("showUpdateForm" + e);
 			model.addAttribute("curvePoints", curvePointService.getCurvePoints());
 			return "redirect:/curvePoint/list";
 		}
@@ -103,11 +115,13 @@ public class CurveController {
 	 */
 	@PostMapping("/curvePoint/update/{id}")
 	public String updateBid(@PathVariable Integer id, @Valid CurvePoint curvePoint, BindingResult result, Model model) {
+		logger.debug("updateBid");
 		if (result.hasErrors()) {
 			return "curvePoint/update";
 		}
 		curvePoint.setId(id);
 		curvePointService.addCurvePoint(curvePoint);
+		logger.info("curvePoint update: " + curvePoint.toString());
 		model.addAttribute("curvePoints", curvePointService.getCurvePoints());
 		return "redirect:/curvePoint/list";
 	}
@@ -121,14 +135,17 @@ public class CurveController {
 	 */
 	@GetMapping("/curvePoint/delete/{id}")
 	public String deleteBid(@PathVariable Integer id, Model model) {
+		logger.debug("deleteBid");
 		CurvePoint curvePoint;
 		try {
 			curvePoint = curvePointService.getCurvePointById(id);
 			curvePointService.delCurvePoint(curvePoint);
+			logger.info("curvePoint delete: " + curvePoint.toString());
 			model.addAttribute("curvePoints", curvePointService.getCurvePoints());
 			return "redirect:/curvePoint/list";
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("deleteBid" + e);
 			model.addAttribute("curvePoints", curvePointService.getCurvePoints());
 			return "redirect:/curvePoint/list";
 		}

@@ -1,5 +1,7 @@
 package com.nnk.springboot.services.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +17,7 @@ import com.nnk.springboot.services.RatingService;
  */
 @Service
 public class RatingServiceImpl implements RatingService {
-
+	private static Logger logger = LoggerFactory.getLogger(RatingServiceImpl.class);
 	@Autowired
 	private RatingRepository ratingRepository;
 
@@ -26,6 +28,7 @@ public class RatingServiceImpl implements RatingService {
 	 */
 	@Override
 	public Iterable<Rating> getRatings() {
+		logger.debug("getRatings");
 		return ratingRepository.findAll();
 	}
 
@@ -37,6 +40,7 @@ public class RatingServiceImpl implements RatingService {
 	 */
 	@Override
 	public Rating addRating(Rating rating) {
+		logger.debug("addRating");
 		return ratingRepository.save(rating);
 	}
 
@@ -49,6 +53,7 @@ public class RatingServiceImpl implements RatingService {
 	 */
 	@Override
 	public Rating getRatingById(Integer id) throws Exception {
+		logger.debug("getRatingById");
 		Rating rating = ratingRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid Rating Id:" + id));
 		return rating;
@@ -61,6 +66,7 @@ public class RatingServiceImpl implements RatingService {
 	 */
 	@Override
 	public void delRating(Rating rating) {
+		logger.debug("delRating");
 		ratingRepository.delete(rating);
 	}
 

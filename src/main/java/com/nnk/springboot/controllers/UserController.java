@@ -1,5 +1,7 @@
 package com.nnk.springboot.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -23,6 +25,7 @@ import jakarta.validation.Valid;
  */
 @Controller
 public class UserController {
+	private static Logger logger = LoggerFactory.getLogger(UserController.class);
 	@Autowired
 	private UserService userService;
 
@@ -34,7 +37,9 @@ public class UserController {
 	 */
 	@GetMapping("/user/list")
 	public String home(Model model) {
+		logger.debug("home");
 		model.addAttribute("users", userService.getUsers());
+		logger.info("users List: " + userService.getUsers());
 		return "user/list";
 	}
 
@@ -46,6 +51,7 @@ public class UserController {
 	 */
 	@GetMapping("/user/add")
 	public String addUser(UserAddDto bid) {
+		logger.debug("addUser");
 		userService.setUserNameUpdating("");
 		return "user/add";
 	}
@@ -61,12 +67,14 @@ public class UserController {
 	 */
 	@PostMapping("/user/validate")
 	public String validate(@Valid UserAddDto userAddDto, BindingResult result, Model model) {
+		logger.debug("validate");
 		if (!result.hasErrors()) {
 			User user = new User(userAddDto.getId(), userAddDto.getUsername(), userAddDto.getPassword(),
 					userAddDto.getFullname(), userAddDto.getRole());
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			user.setPassword(encoder.encode(user.getPassword()));
 			userService.addUser(user);
+			logger.info("user added: " + user.toString());
 			model.addAttribute("users", userService.getUsers());
 			return "redirect:/user/list";
 		}
@@ -83,7 +91,7 @@ public class UserController {
 	 */
 	@GetMapping("/user/update/{id}")
 	public String showUpdateForm(@PathVariable Integer id, Model model) {
-
+		logger.debug("showUpdateForm");
 		User user;
 		try {
 			user = userService.getUserById(id);
@@ -92,10 +100,11 @@ public class UserController {
 			UserAddDto userAddDto = new UserAddDto(user.getId(), user.getUsername(), user.getPassword(),
 					user.getFullname(), user.getRole());
 			model.addAttribute("userAddDto", userAddDto);
+			logger.info("user update: " + userAddDto.toString());
 			return "user/update";
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error("showUpdateForm" + e);
 			model.addAttribute("users", userService.getUsers());
 			return "redirect:/user/list";
 		}
@@ -114,6 +123,7 @@ public class UserController {
 	@PostMapping("/user/update/{id}")
 	public String updateUser(@PathVariable Integer id, @Valid UserAddDto userAddDto, BindingResult result,
 			Model model) {
+		logger.debug("updateUser");
 		if (result.hasErrors()) {
 			return "user/update";
 		}
@@ -124,6 +134,7 @@ public class UserController {
 		user.setPassword(encoder.encode(user.getPassword()));
 		user.setId(id);
 		userService.addUser(user);
+		logger.info("user update: " + user.toString());
 		model.addAttribute("users", userService.getUsers());
 		return "redirect:/user/list";
 	}
@@ -137,16 +148,18 @@ public class UserController {
 	 */
 	@GetMapping("/user/delete/{id}")
 	public String deleteUser(@PathVariable Integer id, Model model) {
+		logger.debug("deleteUser");
 		User user;
 		try {
 			user = userService.getUserById(id);
 			userService.delUser(user);
+			logger.info("user delete: " + user.toString());
 			model.addAttribute("users", userService.getUsers());
 			return "redirect:/user/list";
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			model.addAttribute("curvePoints", userService.getUsers());
+			logger.error("deleteUser" + e);
+			model.addAttribute("users", userService.getUsers());
 			return "redirect:/user/list";
 		}
 	}
