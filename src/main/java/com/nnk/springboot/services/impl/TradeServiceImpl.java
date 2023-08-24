@@ -7,22 +7,46 @@ import com.nnk.springboot.domain.Trade;
 import com.nnk.springboot.repositories.TradeRepository;
 import com.nnk.springboot.services.TradeService;
 
+/**
+ * this class is the service for the entity Trade.
+ * 
+ * @author mickael hayé
+ * @version 1.0
+ */
 @Service
 public class TradeServiceImpl implements TradeService {
 
 	@Autowired
 	private TradeRepository tradeRepository;
 
+	/**
+	 * this method recovers all Trade.
+	 * 
+	 * @return return a list of Trade.
+	 */
 	@Override
 	public Iterable<Trade> getTrades() {
 		return tradeRepository.findAll();
 	}
 
+	/**
+	 * this method saves or updates a Trade.
+	 * 
+	 * @param trade saves or updates.
+	 * @return trade with id.
+	 */
 	@Override
 	public Trade addTrade(Trade trade) {
 		return tradeRepository.save(trade);
 	}
 
+	/**
+	 * this method recovers a Trade by this id.
+	 * 
+	 * @param id of the Trade.
+	 * @return return the trade by id.
+	 * @throws Exception Trade not found with this id.
+	 */
 	@Override
 	public Trade getTradeById(Integer id) throws Exception {
 		Trade trade = tradeRepository.findById(id)
@@ -30,6 +54,11 @@ public class TradeServiceImpl implements TradeService {
 		return trade;
 	}
 
+	/**
+	 * this method deletes a Trade.
+	 * 
+	 * @param trade deletes.
+	 */
 	@Override
 	public void delTrade(Trade trade) {
 		tradeRepository.delete(trade);

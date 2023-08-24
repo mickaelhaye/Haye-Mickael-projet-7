@@ -15,9 +15,10 @@ import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
 /**
- * <h2>ValidPassword</h2>
- *
- * @author aek
+ * ValidPassword annotation for the entity user column password.
+ * 
+ * @author mickael hayé
+ * @version 1.0
  */
 @Documented
 @Constraint(validatedBy = PasswordConstraintValidator.class)
@@ -25,9 +26,21 @@ import jakarta.validation.Payload;
 @Retention(RUNTIME)
 public @interface ValidPassword {
 
+	/**
+	 * 
+	 * @return message
+	 */
 	String message() default "Invalid Password";
 
+	/**
+	 * 
+	 * @return Class
+	 */
 	Class<?>[] groups() default {};
 
+	/**
+	 * 
+	 * @return Class
+	 */
 	Class<? extends Payload>[] payload() default {};
 }

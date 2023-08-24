@@ -8,10 +8,24 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * this class is to manage the security with spring security.
+ * 
+ * @author mickael hayé
+ * @version 1.0
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
+
+	/**
+	 * this method consists of managing the filter chain.
+	 * 
+	 * @param http security
+	 * @return http build
+	 * @throws Exception not found
+	 */
 	//@formatter:off
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

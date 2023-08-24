@@ -16,6 +16,13 @@ import com.nnk.springboot.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * class to manage the authentication.
+ * 
+ * @author mickael hayé
+ * @version 1.0
+ */
+
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
@@ -23,6 +30,11 @@ public class ApplicationConfig {
 	@Autowired
 	private UserRepository userRepository;
 
+	/**
+	 * to retrieve the userDetailsServive by username.
+	 * 
+	 * @return userDetailsService
+	 */
 	@Bean
 	public UserDetailsService userDetailsService() {
 		return username -> userRepository.findByUsername(username)
@@ -30,6 +42,11 @@ public class ApplicationConfig {
 
 	}
 
+	/**
+	 * to retrieve user authentication parameters.
+	 * 
+	 * @return authprovider
+	 */
 	@Bean
 	public AuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -38,11 +55,21 @@ public class ApplicationConfig {
 		return authProvider;
 	}
 
+	/**
+	 * @param config of AuthenticationConfiguration
+	 * @return config of authenticationManager
+	 * @throws Exception not found
+	 */
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
 		return config.getAuthenticationManager();
 	}
 
+	/**
+	 * to encrypt the password.
+	 * 
+	 * @return the encrypted password
+	 */
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();

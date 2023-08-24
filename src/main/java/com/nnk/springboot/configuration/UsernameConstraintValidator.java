@@ -9,6 +9,12 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.SneakyThrows;
 
+/**
+ * this class is used to check Username contraints.
+ * 
+ * @author mickael hayé
+ * @version 1.0
+ */
 public class UsernameConstraintValidator implements ConstraintValidator<ValidUsername, String> {
 
 	@Autowired
@@ -19,6 +25,9 @@ public class UsernameConstraintValidator implements ConstraintValidator<ValidUse
 
 	}
 
+	/**
+	 * The username must be used only once
+	 */
 	@SneakyThrows
 	@Override
 	public boolean isValid(String username, ConstraintValidatorContext context) {

@@ -14,6 +14,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * this class is the entity CurvePoint.
+ * 
+ * @author mickael hayé
+ * @version 1.0
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

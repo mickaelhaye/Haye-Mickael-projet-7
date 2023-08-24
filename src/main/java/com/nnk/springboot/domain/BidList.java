@@ -16,6 +16,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * this class is the entity Bidlist.
+ * 
+ * @author mickael hayé
+ * @version 1.0
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -70,9 +76,4 @@ public class BidList {
 	private String sourceListId;
 	@Column(name = "side")
 	private String side;
-
-	public BidList(String accountTest, String typeTest, double v) {
-	}
-
-	// TODO: Map columns in data table BIDLIST with corresponding java fields
 }

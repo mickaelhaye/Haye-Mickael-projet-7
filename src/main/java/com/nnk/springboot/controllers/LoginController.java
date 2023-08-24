@@ -10,6 +10,12 @@ import com.nnk.springboot.services.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+/**
+ * this class is the controller for the login.
+ * 
+ * @author mickael hayé
+ * @version 1.0
+ */
 @Controller
 @RequestMapping("app")
 public class LoginController {
@@ -17,6 +23,11 @@ public class LoginController {
 	@Autowired
 	private UserService userService;
 
+	/**
+	 * this endpoint is to display the login page.
+	 * 
+	 * @return return the url login page.
+	 */
 	@GetMapping("login")
 	public ModelAndView login() {
 		ModelAndView mav = new ModelAndView();
@@ -24,6 +35,12 @@ public class LoginController {
 		return mav;
 	}
 
+	/**
+	 * this endpoint is to display the success login page.
+	 * 
+	 * @param httpServletRequest contains the userRemote.
+	 * @return the url of the success login page.
+	 */
 	@GetMapping("login_success")
 	public ModelAndView loginSuccess(HttpServletRequest httpServletRequest) {
 		ModelAndView mav = new ModelAndView();
@@ -32,6 +49,11 @@ public class LoginController {
 		return mav;
 	}
 
+	/**
+	 * this endpoint is to display the error login page.
+	 * 
+	 * @return the url of the error login page.
+	 */
 	@GetMapping("login_error")
 	public ModelAndView loginError() {
 		ModelAndView mav = new ModelAndView();
@@ -39,6 +61,11 @@ public class LoginController {
 		return mav;
 	}
 
+	/**
+	 * this endpoint is to display the user list page.
+	 * 
+	 * @return the url of the user list page.
+	 */
 	@GetMapping("secure/article-details")
 	public ModelAndView getAllUserArticles() {
 		ModelAndView mav = new ModelAndView();
@@ -47,6 +74,12 @@ public class LoginController {
 		return mav;
 	}
 
+	/**
+	 * this endpoint is to display the error 403 page.
+	 * 
+	 * @param httpServletRequest httpServletRequest contains the userRemote.
+	 * @return the url of the 403 error page.
+	 */
 	@GetMapping("error")
 	public ModelAndView error(HttpServletRequest httpServletRequest) {
 		ModelAndView mav = new ModelAndView();

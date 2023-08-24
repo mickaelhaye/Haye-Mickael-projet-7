@@ -8,6 +8,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * this class is the dto to add and update an user.
+ * 
+ * @author mickael hayé
+ * @version 1.0
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -15,9 +15,10 @@ import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
 /**
- * <h2>ValidPassword</h2>
- *
- * @author aek
+ * ValidUsername annotation for the entity user column username.
+ * 
+ * @author mickael hayé
+ * @version 1.0
  */
 @Documented
 @Constraint(validatedBy = UsernameConstraintValidator.class)
@@ -25,9 +26,21 @@ import jakarta.validation.Payload;
 @Retention(RUNTIME)
 public @interface ValidUsername {
 
+	/**
+	 * 
+	 * @return message
+	 */
 	String message() default "Invalid Username";
 
+	/**
+	 * 
+	 * @return Class
+	 */
 	Class<?>[] groups() default {};
 
+	/**
+	 * 
+	 * @return Class
+	 */
 	Class<? extends Payload>[] payload() default {};
 }

@@ -21,6 +21,12 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.SneakyThrows;
 
+/**
+ * this class is used to check password contraints.
+ * 
+ * @author mickael hayé
+ * @version 1.0
+ */
 public class PasswordConstraintValidator implements ConstraintValidator<ValidPassword, String> {
 
 	@Override
@@ -28,6 +34,10 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
 
 	}
 
+	/**
+	 * The password must be at least 8 characters long, one upper case, one lower
+	 * case, one number, one symbol, no spaces.
+	 */
 	@SneakyThrows
 	@Override
 	public boolean isValid(String password, ConstraintValidatorContext context) {

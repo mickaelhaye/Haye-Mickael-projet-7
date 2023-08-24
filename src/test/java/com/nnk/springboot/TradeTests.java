@@ -1,13 +1,13 @@
 package com.nnk.springboot;
 
-import com.nnk.springboot.domain.Trade;
-import com.nnk.springboot.repositories.TradeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
-import java.util.Optional;
-
+/**
+ * this class is to test for the entity Trade.
+ * 
+ * @author mickael hayé
+ * @version 1.0
+ */
 @SpringBootTest
 public class TradeTests {
 

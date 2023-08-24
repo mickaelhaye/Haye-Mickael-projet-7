@@ -14,11 +14,24 @@ import com.nnk.springboot.services.RatingService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
+/**
+ * this class is the controller for the entity Rating.
+ * 
+ * @author mickael hayé
+ * @version 1.0
+ */
 @Controller
 public class RatingController {
 	@Autowired
 	private RatingService ratingService;
 
+	/**
+	 * this endpoint is to display the list of the rating.
+	 * 
+	 * @param model              contains all rating.
+	 * @param httpServletRequest contains the userRemote.
+	 * @return return the url with the list of the rating.
+	 */
 	@GetMapping("/rating/list")
 	public String home(Model model, HttpServletRequest httpServletRequest) {
 		model.addAttribute("ratings", ratingService.getRatings());
@@ -26,14 +39,28 @@ public class RatingController {
 		return "rating/list";
 	}
 
+	/**
+	 * this endpoint is to create a new Rating.
+	 * 
+	 * @param rating contains the information for the new Rating.
+	 * @return return the url to create a new Rating with the new Rating.
+	 */
 	@GetMapping("/rating/add")
 	public String addRatingForm(Rating rating) {
 		return "rating/add";
 	}
 
+	/**
+	 * this endpoint is to retrieve the information of the new Rating.
+	 * 
+	 * @param rating contains the information for the new Rating.
+	 * @param result contains the information to check the data.
+	 * @param model  contains all rating.
+	 * @return return the url with the list of the rating if the datas are OK or the
+	 *         url to create a new Rating if the data is not OK.
+	 */
 	@PostMapping("/rating/validate")
 	public String validate(@Valid Rating rating, BindingResult result, Model model) {
-		// TODO: check data valid and save to db, after saving return Rating list
 		if (!result.hasErrors()) {
 			ratingService.addRating(rating);
 			model.addAttribute("ratings", ratingService.getRatings());
@@ -42,26 +69,40 @@ public class RatingController {
 		return "rating/add";
 	}
 
+	/**
+	 * this endpoint is to update a Rating with this id.
+	 * 
+	 * @param id    contains the id of the Rating.
+	 * @param model contain the Rating.
+	 * @return return the url to update a Rating if the id is OK or the url with the
+	 *         list of the rating if the id is not OK.
+	 */
 	@GetMapping("/rating/update/{id}")
 	public String showUpdateForm(@PathVariable Integer id, Model model) {
-		// TODO: get Rating by Id and to model then show to the form
 		Rating rating;
 		try {
 			rating = ratingService.getRatingById(id);
 			model.addAttribute("rating", rating);
 			return "rating/update";
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			model.addAttribute("ratings", ratingService.getRatings());
 			return "redirect:/rating/list";
 		}
 	}
 
+	/**
+	 * this endpoint is to retrieve the information of the updated Rating.
+	 * 
+	 * @param id     contains the id of the Rating.
+	 * @param rating contains the information for the updated Rating.
+	 * @param result contains the information to check the data.
+	 * @param model  contains all rating.
+	 * @return return the url with the list of the rating if the datas are OK or the
+	 *         url to update a Rating if the data is not OK.
+	 */
 	@PostMapping("/rating/update/{id}")
 	public String updateRating(@PathVariable Integer id, @Valid Rating rating, BindingResult result, Model model) {
-		// TODO: check required fields, if valid call service to update Rating and
-		// return Rating list
 		if (result.hasErrors()) {
 			return "rating/update";
 		}
@@ -71,9 +112,15 @@ public class RatingController {
 		return "redirect:/rating/list";
 	}
 
+	/**
+	 * this endpoint is to delete a Rating with this id.
+	 * 
+	 * @param id    contains the id of the Rating
+	 * @param model contains all rating.
+	 * @return return the url with the list of the rating
+	 */
 	@GetMapping("/rating/delete/{id}")
 	public String deleteRating(@PathVariable Integer id, Model model) {
-		// TODO: Find Rating by Id and delete the Rating, return to Rating list
 		Rating rating;
 		try {
 			rating = ratingService.getRatingById(id);
@@ -81,9 +128,8 @@ public class RatingController {
 			model.addAttribute("ratings", ratingService.getRatings());
 			return "redirect:/rating/list";
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			model.addAttribute("curvePoints", ratingService.getRatings());
+			model.addAttribute("ratings", ratingService.getRatings());
 			return "redirect:/rating/list";
 		}
 	}
