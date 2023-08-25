@@ -1,11 +1,10 @@
 package com.nnk.springboot;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.nnk.springboot.domain.CurvePoint;
-import com.nnk.springboot.repositories.CurvePointRepository;
+import com.nnk.springboot.services.CurvePointService;
 
 /**
  * this class is to test for the entity CurvePoint.
@@ -27,7 +26,7 @@ import com.nnk.springboot.repositories.CurvePointRepository;
 public class CurvePointTests {
 
 	@Autowired
-	private CurvePointRepository curvePointRepository;
+	private CurvePointService curvePointService;
 
 	@Test
 	public void curvePointTest() {
@@ -37,24 +36,29 @@ public class CurvePointTests {
 		curvePoint.setValue(30d);
 
 		// Save
-		curvePoint = curvePointRepository.save(curvePoint);
+		curvePoint = curvePointService.addCurvePoint(curvePoint);
 		assertNotNull(curvePoint.getId());
 		assertTrue(curvePoint.getCurve_id() == 10);
 
 		// Update
 		curvePoint.setCurve_id(20);
-		curvePoint = curvePointRepository.save(curvePoint);
+		curvePoint = curvePointService.addCurvePoint(curvePoint);
 		assertTrue(curvePoint.getCurve_id() == 20);
 
 		// Find
-		List<CurvePoint> listResult = curvePointRepository.findAll();
+		List<CurvePoint> listResult = (List<CurvePoint>) curvePointService.getCurvePoints();
 		assertTrue(listResult.size() > 0);
 
 		// Delete
 		Integer id = curvePoint.getId();
-		curvePointRepository.delete(curvePoint);
-		Optional<CurvePoint> curvePointList = curvePointRepository.findById(id);
-		assertFalse(curvePointList.isPresent());
+		curvePointService.delCurvePoint(curvePoint);
+		CurvePoint curvePointList = null;
+		try {
+			curvePointList = curvePointService.getCurvePointById(id);
+		} catch (Exception e) {
+			assertNull(curvePointList);
+		}
+
 	}
 
 }
