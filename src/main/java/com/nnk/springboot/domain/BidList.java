@@ -76,14 +76,4 @@ public class BidList {
 	private String sourceListId;
 	@Column(name = "side")
 	private String side;
-
-	/**
-	 * constructor for test
-	 * 
-	 * @param string
-	 * @param string2
-	 * @param d
-	 */
-	public BidList(String string, String string2, double d) {
-	}
 }
