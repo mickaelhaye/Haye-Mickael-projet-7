@@ -1,4 +1,4 @@
-package com.nnk.springboot;
+package com.nnk.springboot.ServiceTests;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -51,8 +51,14 @@ public class CurvePointTests {
 
 		// Delete
 		Integer id = curvePoint.getId();
-		curvePointService.delCurvePoint(curvePoint);
 		CurvePoint curvePointList = null;
+		try {
+			curvePointList = curvePointService.getCurvePointById(id);
+			assertNotNull(curvePointList);
+		} catch (Exception e) {
+		}
+		curvePointService.delCurvePoint(curvePoint);
+		curvePointList = null;
 		try {
 			curvePointList = curvePointService.getCurvePointById(id);
 		} catch (Exception e) {

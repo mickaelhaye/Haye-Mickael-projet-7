@@ -1,4 +1,4 @@
-package com.nnk.springboot;
+package com.nnk.springboot.ServiceTests;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -50,8 +50,15 @@ public class TradeTests {
 
 		// Delete
 		Integer id = trade.getId();
-		tradeService.delTrade(trade);
 		Trade tradeList = null;
+		try {
+			tradeList = tradeService.getTradeById(id);
+			assertNotNull(tradeList);
+		} catch (Exception e) {
+
+		}
+		tradeService.delTrade(trade);
+		tradeList = null;
 		try {
 			tradeList = tradeService.getTradeById(id);
 		} catch (Exception e) {

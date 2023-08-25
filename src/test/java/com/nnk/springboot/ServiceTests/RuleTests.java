@@ -1,4 +1,4 @@
-package com.nnk.springboot;
+package com.nnk.springboot.ServiceTests;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -54,8 +54,15 @@ public class RuleTests {
 
 		// Delete
 		Integer id = rule.getId();
-		ruleNameService.delRuleName(rule);
 		RuleName ruleList = null;
+		try {
+			ruleList = ruleNameService.getRuleNameById(id);
+			assertNotNull(ruleList);
+		} catch (Exception e) {
+
+		}
+		ruleNameService.delRuleName(rule);
+		ruleList = null;
 		try {
 			ruleList = ruleNameService.getRuleNameById(id);
 		} catch (Exception e) {

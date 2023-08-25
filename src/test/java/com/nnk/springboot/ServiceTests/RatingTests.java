@@ -1,4 +1,4 @@
-package com.nnk.springboot;
+package com.nnk.springboot.ServiceTests;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -52,8 +52,14 @@ public class RatingTests {
 
 		// Delete
 		Integer id = rating.getId();
-		ratingService.delRating(rating);
 		Rating ratingList = null;
+		try {
+			ratingList = ratingService.getRatingById(id);
+			assertNotNull(ratingList);
+		} catch (Exception e) {
+		}
+		ratingService.delRating(rating);
+		ratingList = null;
 		try {
 			ratingList = ratingService.getRatingById(id);
 		} catch (Exception e) {

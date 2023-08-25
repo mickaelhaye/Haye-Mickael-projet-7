@@ -1,4 +1,4 @@
-package com.nnk.springboot;
+package com.nnk.springboot.ServiceTests;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -52,8 +52,14 @@ public class BidTests {
 
 		// Delete
 		Integer id = bid.getBidListId();
-		BidListservice.delBidList(bid);
 		BidList bidList = null;
+		try {
+			bidList = BidListservice.getBidListById(id);
+			assertNotNull(bidList);
+		} catch (Exception e) {
+		}
+		BidListservice.delBidList(bid);
+		bidList = null;
 		try {
 			bidList = BidListservice.getBidListById(id);
 		} catch (Exception e) {
