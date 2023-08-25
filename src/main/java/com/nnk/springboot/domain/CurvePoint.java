@@ -42,7 +42,7 @@ public class CurvePoint {
 	@Column(name = "term")
 	private Double term;
 
-	@Column(name = "value")
+	@Column(name = "val")
 	private Double value;
 
 	@Column(name = "creation_date")
