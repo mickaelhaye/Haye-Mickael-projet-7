@@ -30,6 +30,9 @@ public class UserTests {
 	@Autowired
 	private UserService userService;
 
+	/**
+	 * methods to test save, update, find and delete entity User
+	 */
 	@Test
 	public void userTest() {
 		User user = new User();

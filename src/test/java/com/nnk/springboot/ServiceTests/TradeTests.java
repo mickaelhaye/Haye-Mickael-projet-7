@@ -28,6 +28,9 @@ public class TradeTests {
 	@Autowired
 	private TradeService tradeService;
 
+	/**
+	 * methods to test save, update, find and delete entity Trade
+	 */
 	@Test
 	public void tradeTest() {
 		Trade trade = new Trade();

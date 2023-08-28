@@ -11,6 +11,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @SpringBootTest
 public class PasswordEncodeTest {
 
+	/**
+	 * methods to test PasswordEncoder
+	 */
 	@Test
 	public void testPassword() {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();

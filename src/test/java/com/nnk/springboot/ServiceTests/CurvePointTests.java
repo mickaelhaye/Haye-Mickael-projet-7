@@ -28,6 +28,9 @@ public class CurvePointTests {
 	@Autowired
 	private CurvePointService curvePointService;
 
+	/**
+	 * methods to test save, update, find and delete entity CurvePoint
+	 */
 	@Test
 	public void curvePointTest() {
 		CurvePoint curvePoint = new CurvePoint();

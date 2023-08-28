@@ -28,6 +28,9 @@ public class RatingTests {
 	@Autowired
 	private RatingService ratingService;
 
+	/**
+	 * methods to test save, update, find and delete entity Rating
+	 */
 	@Test
 	public void ratingTest() {
 		Rating rating = new Rating();

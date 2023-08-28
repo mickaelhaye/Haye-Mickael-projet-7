@@ -28,6 +28,9 @@ public class RuleTests {
 	@Autowired
 	private RuleNameService ruleNameService;
 
+	/**
+	 * methods to test save, update, find and delete entity RuleName
+	 */
 	@Test
 	public void ruleTest() {
 		RuleName rule = new RuleName();

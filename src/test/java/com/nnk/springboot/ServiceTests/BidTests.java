@@ -29,6 +29,9 @@ public class BidTests {
 	@Autowired
 	private BidListService BidListservice;
 
+	/**
+	 * methods to test save, update, find and delete BidList
+	 */
 	@Test
 	public void bidListTest() {
 		BidList bid = new BidList();
