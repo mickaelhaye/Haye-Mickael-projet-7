@@ -14,7 +14,7 @@ import com.nnk.springboot.domain.CurvePoint;
 import com.nnk.springboot.services.CurvePointService;
 
 /**
- * this class is to test for the entity CurvePoint.
+ * this class is to test the CurvePointService methods.
  * 
  * @author mickael hayé
  * @version 1.0

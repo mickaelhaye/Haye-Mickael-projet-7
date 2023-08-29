@@ -16,7 +16,7 @@ import com.nnk.springboot.domain.User;
 import com.nnk.springboot.services.UserService;
 
 /**
- * this class is to test for the entity Trade.
+ * this class is to test the UserService methods.
  * 
  * @author mickael hayé
  * @version 1.0

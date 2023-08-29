@@ -15,7 +15,7 @@ import com.nnk.springboot.domain.BidList;
 import com.nnk.springboot.services.BidListService;
 
 /**
- * this class is to test for the entity Bidlist.
+ * this class is to test the BidListService methods.
  * 
  * @author mickael hayé
  * @version 1.0

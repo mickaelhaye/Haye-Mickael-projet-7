@@ -14,7 +14,7 @@ import com.nnk.springboot.domain.Trade;
 import com.nnk.springboot.services.TradeService;
 
 /**
- * this class is to test for the entity Trade.
+ * this class is to test the TradeService methods.
  * 
  * @author mickael hayé
  * @version 1.0

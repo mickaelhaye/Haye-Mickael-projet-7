@@ -17,6 +17,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.nnk.springboot.domain.Rating;
 import com.nnk.springboot.services.RatingService;
 
+/**
+ * this class is to test the RatingContoller methods.
+ * 
+ * @author mickael hayé
+ * @version 1.0
+ */
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest
 class RatingControllerTest {
@@ -26,6 +32,9 @@ class RatingControllerTest {
 	@Autowired
 	private RatingService ratingService;
 
+	/**
+	 * this method is to add a RatingList in the dataBase
+	 */
 	@BeforeEach
 	public void setUp() {
 		Rating rating = new Rating();
@@ -33,6 +42,11 @@ class RatingControllerTest {
 		ratingService.addRating(rating);
 	}
 
+	/**
+	 * this method is to test the method home with the endpoint get /rating/list
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void homeTest() throws Exception {
 		mockMvc.perform(get("/rating/list")).andExpect(status().isOk()).andDo(print())
@@ -40,9 +54,14 @@ class RatingControllerTest {
 				.andExpect(MockMvcResultMatchers.model().attributeExists("ratings"))
 				.andExpect(MockMvcResultMatchers.model().attributeExists("httpServletRequest"))
 				.andExpect(MockMvcResultMatchers.content().string(containsString("newSandPrating")));
-
 	}
 
+	/**
+	 * this method is to test the method addRatingForm with the endpoint get
+	 * /rating/add
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void addRatingFormTest() throws Exception {
 
@@ -50,12 +69,24 @@ class RatingControllerTest {
 				.andExpect(MockMvcResultMatchers.view().name("rating/add"));
 	}
 
+	/**
+	 * this method is to test the method validate with the endpoint post
+	 * /rating/validate
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void validateTest() throws Exception {
 		mockMvc.perform(post("/rating/validate")).andExpect(status().is3xxRedirection())
 				.andExpect(MockMvcResultMatchers.view().name("redirect:/rating/list"));
 	}
 
+	/**
+	 * this method is to test the method showUpdateForm with the endpoint get
+	 * /rating/update/{id}
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void showUpdateFormTest() throws Exception {
 
@@ -67,6 +98,12 @@ class RatingControllerTest {
 
 	}
 
+	/**
+	 * this method is to test the method updateRating with the endpoint post
+	 * /rating/update/{id}
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void updateRatingTest() throws Exception {
 		mockMvc.perform(post("/rating/update/1")).andExpect(status().is3xxRedirection())
@@ -74,6 +111,12 @@ class RatingControllerTest {
 
 	}
 
+	/**
+	 * this method is to test the method deleteRating with the endpoint post
+	 * /rating/delete/{id}
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void deleteRatingTest() throws Exception {
 

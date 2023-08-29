@@ -14,7 +14,7 @@ import com.nnk.springboot.domain.Rating;
 import com.nnk.springboot.services.RatingService;
 
 /**
- * this class is to test for the entity Rating.
+ * this class is to test the RatingService methods.
  * 
  * @author mickael hayé
  * @version 1.0

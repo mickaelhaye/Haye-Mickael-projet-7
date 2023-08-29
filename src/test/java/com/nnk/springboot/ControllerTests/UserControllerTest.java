@@ -18,6 +18,12 @@ import com.nnk.springboot.domain.User;
 import com.nnk.springboot.domain.dto.UserAddDto;
 import com.nnk.springboot.services.UserService;
 
+/**
+ * this class is to test the UserContoller methods.
+ * 
+ * @author mickael hayé
+ * @version 1.0
+ */
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest
 class UserControllerTest {
@@ -27,6 +33,9 @@ class UserControllerTest {
 	@Autowired
 	private UserService userService;
 
+	/**
+	 * this method is to add a UserList in the dataBase
+	 */
 	@BeforeEach
 	public void setUp() {
 		User user = new User();
@@ -37,6 +46,11 @@ class UserControllerTest {
 
 	}
 
+	/**
+	 * this method is to test the method home with the endpoint get /user/list
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void homeTest() throws Exception {
 		mockMvc.perform(get("/user/list")).andExpect(status().isOk()).andDo(print())
@@ -46,6 +60,11 @@ class UserControllerTest {
 
 	}
 
+	/**
+	 * this method is to test the method addUserForm with the endpoint get /user/add
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void addUserFormTest() throws Exception {
 
@@ -53,6 +72,12 @@ class UserControllerTest {
 				.andExpect(MockMvcResultMatchers.view().name("user/add"));
 	}
 
+	/**
+	 * this method is to test the method validate with the endpoint post
+	 * /user/validate
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void validateTest() throws Exception {
 
@@ -70,6 +95,12 @@ class UserControllerTest {
 
 	}
 
+	/**
+	 * this method is to test the method showUpdateForm with the endpoint get
+	 * /user/update/{id}
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void showUpdateFormTest() throws Exception {
 
@@ -81,6 +112,12 @@ class UserControllerTest {
 
 	}
 
+	/**
+	 * this method is to test the method updateUser with the endpoint post
+	 * /user/update/{id}
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void updateUserTest() throws Exception {
 		User user = userService.getUserById(1);
@@ -98,6 +135,12 @@ class UserControllerTest {
 
 	}
 
+	/**
+	 * this method is to test the method deleteUser with the endpoint post
+	 * /user/delete/{id}
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void deleteUserTest() throws Exception {
 		mockMvc.perform(get("/user/delete/0")).andExpect(status().is3xxRedirection()).andDo(print())

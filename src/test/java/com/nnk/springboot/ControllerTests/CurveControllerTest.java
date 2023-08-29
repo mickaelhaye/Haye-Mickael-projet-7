@@ -16,6 +16,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.nnk.springboot.domain.CurvePoint;
 import com.nnk.springboot.services.CurvePointService;
 
+/**
+ * this class is to test the CurveContoller methods.
+ * 
+ * @author mickael hayé
+ * @version 1.0
+ */
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest
 class CurveControllerTest {
@@ -25,6 +31,9 @@ class CurveControllerTest {
 	@Autowired
 	private CurvePointService curvePointService;
 
+	/**
+	 * this method is to add a CurveList in the dataBase
+	 */
 	@BeforeEach
 	public void setUp() {
 		CurvePoint curvePoint = new CurvePoint();
@@ -32,6 +41,11 @@ class CurveControllerTest {
 		curvePointService.addCurvePoint(curvePoint);
 	}
 
+	/**
+	 * this method is to test the method home with the endpoint get /curvePoint/list
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void homeTest() throws Exception {
 		mockMvc.perform(get("/curvePoint/list")).andExpect(status().isOk()).andDo(print())
@@ -40,19 +54,37 @@ class CurveControllerTest {
 				.andExpect(MockMvcResultMatchers.model().attributeExists("httpServletRequest"));
 	}
 
+	/**
+	 * this method is to test the method addCurveForm with the endpoint get
+	 * /curvePoint/add
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
-	void addBidFormTest() throws Exception {
+	void addCurveFormTest() throws Exception {
 
 		mockMvc.perform(get("/curvePoint/add")).andExpect(status().isOk()).andDo(print())
 				.andExpect(MockMvcResultMatchers.view().name("curvePoint/add"));
 	}
 
+	/**
+	 * this method is to test the method validate with the endpoint post
+	 * /curvePoint/validate
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void validateTest() throws Exception {
 		mockMvc.perform(post("/curvePoint/validate")).andExpect(status().is3xxRedirection())
 				.andExpect(MockMvcResultMatchers.view().name("redirect:/curvePoint/list"));
 	}
 
+	/**
+	 * this method is to test the method showUpdateForm with the endpoint get
+	 * /curvePoint/update/{id}
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void showUpdateFormTest() throws Exception {
 
@@ -64,6 +96,12 @@ class CurveControllerTest {
 
 	}
 
+	/**
+	 * this method is to test the method updateCurve with the endpoint post
+	 * /curvePoint/update/{id}
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void updateCurveTest() throws Exception {
 		mockMvc.perform(post("/curvePoint/update/1")).andExpect(status().is3xxRedirection())
@@ -71,6 +109,12 @@ class CurveControllerTest {
 
 	}
 
+	/**
+	 * this method is to test the method deleteCurve with the endpoint post
+	 * /curvePoint/delete/{id}
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void deleteCurveTest() throws Exception {
 		mockMvc.perform(get("/curvePoint/delete/0")).andExpect(status().is3xxRedirection()).andDo(print())

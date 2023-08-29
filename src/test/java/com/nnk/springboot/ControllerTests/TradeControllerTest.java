@@ -17,6 +17,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.nnk.springboot.domain.Trade;
 import com.nnk.springboot.services.TradeService;
 
+/**
+ * this class is to test the TradeContoller methods.
+ * 
+ * @author mickael hayé
+ * @version 1.0
+ */
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest
 class TradeControllerTest {
@@ -26,6 +32,9 @@ class TradeControllerTest {
 	@Autowired
 	private TradeService tradeService;
 
+	/**
+	 * this method is to add a TradeList in the dataBase
+	 */
 	@BeforeEach
 	public void setUp() {
 		Trade trade = new Trade();
@@ -33,6 +42,11 @@ class TradeControllerTest {
 		tradeService.addTrade(trade);
 	}
 
+	/**
+	 * this method is to test the method home with the endpoint get /trade/list
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void homeTest() throws Exception {
 		mockMvc.perform(get("/trade/list")).andExpect(status().isOk()).andDo(print())
@@ -43,6 +57,12 @@ class TradeControllerTest {
 
 	}
 
+	/**
+	 * this method is to test the method addTradeForm with the endpoint get
+	 * /trade/add
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void addTradeFormTest() throws Exception {
 
@@ -50,12 +70,24 @@ class TradeControllerTest {
 				.andExpect(MockMvcResultMatchers.view().name("trade/add"));
 	}
 
+	/**
+	 * this method is to test the method validate with the endpoint post
+	 * /trade/validate
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void validateTest() throws Exception {
 		mockMvc.perform(post("/trade/validate")).andExpect(status().is3xxRedirection())
 				.andExpect(MockMvcResultMatchers.view().name("redirect:/trade/list"));
 	}
 
+	/**
+	 * this method is to test the method showUpdateForm with the endpoint get
+	 * /trade/update/{id}
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void showUpdateFormTest() throws Exception {
 
@@ -67,6 +99,12 @@ class TradeControllerTest {
 
 	}
 
+	/**
+	 * this method is to test the method updateTrade with the endpoint post
+	 * /trade/update/{id}
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void updateTradeTest() throws Exception {
 		mockMvc.perform(post("/trade/update/1")).andExpect(status().is3xxRedirection())
@@ -74,6 +112,12 @@ class TradeControllerTest {
 
 	}
 
+	/**
+	 * this method is to test the method deleteTrade with the endpoint post
+	 * /trade/delete/{id}
+	 * 
+	 * @throws Exception standard
+	 */
 	@Test
 	void deleteTradeTest() throws Exception {
 		mockMvc.perform(get("/trade/delete/0")).andExpect(status().is3xxRedirection()).andDo(print())

@@ -14,7 +14,7 @@ import com.nnk.springboot.domain.RuleName;
 import com.nnk.springboot.services.RuleNameService;
 
 /**
- * this class is to test for the entity RuleName.
+ * this class is to test the RuleService methods.
  * 
  * @author mickael hayé
  * @version 1.0
