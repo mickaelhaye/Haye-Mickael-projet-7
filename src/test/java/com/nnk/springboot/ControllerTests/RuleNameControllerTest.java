@@ -1,6 +1,7 @@
 package com.nnk.springboot.ControllerTests;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -15,7 +16,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.nnk.springboot.domain.RuleName;
+import com.nnk.springboot.domain.User;
 import com.nnk.springboot.services.RuleNameService;
+import com.nnk.springboot.services.UserService;
 
 /**
  * this class is to test the RuleNameContoller methods.
@@ -26,20 +29,37 @@ import com.nnk.springboot.services.RuleNameService;
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest
 class RuleNameControllerTest {
+	private User userTest = new User();
+	private RuleName ruleName = new RuleName();
+
 	@Autowired
 	private MockMvc mockMvc;
 
 	@Autowired
 	private RuleNameService ruleNameService;
 
+	@Autowired
+	private UserService userService;
+
 	/**
 	 * this method is to add a RuleNameList in the dataBase
 	 */
 	@BeforeEach
 	public void setUp() {
-		RuleName ruleName = new RuleName();
+
 		ruleName.setName("newName");
+		ruleName.setDescription("newDescription");
+		ruleName.setJson("newJson");
+		ruleName.setTemplate("newTemplate");
+		ruleName.setSql("newSql");
+		ruleName.setSqlPart("newSqlpart");
 		ruleNameService.addRuleName(ruleName);
+
+		userTest.setFullname("newFullname");
+		userTest.setUsername("newUsername");
+		userTest.setPassword("Info06/17");
+		userTest.setRole("ROLE_ADMIN");
+		userService.addUser(userTest);
 	}
 
 	/**
@@ -49,7 +69,7 @@ class RuleNameControllerTest {
 	 */
 	@Test
 	void homeTest() throws Exception {
-		mockMvc.perform(get("/ruleName/list")).andExpect(status().isOk()).andDo(print())
+		mockMvc.perform(get("/ruleName/list").with(user(userTest))).andExpect(status().isOk()).andDo(print())
 				.andExpect(MockMvcResultMatchers.view().name("ruleName/list"))
 				.andExpect(MockMvcResultMatchers.model().attributeExists("ruleNames"))
 				.andExpect(MockMvcResultMatchers.model().attributeExists("httpServletRequest"))
@@ -66,7 +86,7 @@ class RuleNameControllerTest {
 	@Test
 	void addRuleNameFormTest() throws Exception {
 
-		mockMvc.perform(get("/ruleName/add")).andExpect(status().isOk()).andDo(print())
+		mockMvc.perform(get("/ruleName/add").with(user(userTest))).andExpect(status().isOk()).andDo(print())
 				.andExpect(MockMvcResultMatchers.view().name("ruleName/add"));
 	}
 
@@ -78,7 +98,7 @@ class RuleNameControllerTest {
 	 */
 	@Test
 	void validateTest() throws Exception {
-		mockMvc.perform(post("/ruleName/validate")).andExpect(status().is3xxRedirection())
+		mockMvc.perform(post("/ruleName/validate").with(user(userTest))).andExpect(status().is3xxRedirection())
 				.andExpect(MockMvcResultMatchers.view().name("redirect:/ruleName/list"));
 	}
 
@@ -91,10 +111,10 @@ class RuleNameControllerTest {
 	@Test
 	void showUpdateFormTest() throws Exception {
 
-		mockMvc.perform(get("/ruleName/update/0")).andExpect(status().is3xxRedirection()).andDo(print())
-				.andExpect(MockMvcResultMatchers.view().name("redirect:/ruleName/list"));
+		mockMvc.perform(get("/ruleName/update/0").with(user(userTest))).andExpect(status().is3xxRedirection())
+				.andDo(print()).andExpect(MockMvcResultMatchers.view().name("redirect:/ruleName/list"));
 
-		mockMvc.perform(get("/ruleName/update/1")).andExpect(status().isOk()).andDo(print())
+		mockMvc.perform(get("/ruleName/update/1").with(user(userTest))).andExpect(status().isOk()).andDo(print())
 				.andExpect(MockMvcResultMatchers.view().name("ruleName/update"));
 
 	}
@@ -107,7 +127,7 @@ class RuleNameControllerTest {
 	 */
 	@Test
 	void updateRuleNameTest() throws Exception {
-		mockMvc.perform(post("/ruleName/update/1")).andExpect(status().is3xxRedirection())
+		mockMvc.perform(post("/ruleName/update/1").with(user(userTest))).andExpect(status().is3xxRedirection())
 				.andExpect(MockMvcResultMatchers.view().name("redirect:/ruleName/list"));
 
 	}
@@ -120,11 +140,11 @@ class RuleNameControllerTest {
 	 */
 	@Test
 	void deleteRuleNameTest() throws Exception {
-		mockMvc.perform(get("/ruleName/delete/0")).andExpect(status().is3xxRedirection()).andDo(print())
-				.andExpect(MockMvcResultMatchers.view().name("redirect:/ruleName/list"));
+		mockMvc.perform(get("/ruleName/delete/0").with(user(userTest))).andExpect(status().is3xxRedirection())
+				.andDo(print()).andExpect(MockMvcResultMatchers.view().name("redirect:/ruleName/list"));
 
-		mockMvc.perform(get("/ruleName/delete/1")).andExpect(status().is3xxRedirection()).andDo(print())
-				.andExpect(MockMvcResultMatchers.view().name("redirect:/ruleName/list"));
+		mockMvc.perform(get("/ruleName/delete/1").with(user(userTest))).andExpect(status().is3xxRedirection())
+				.andDo(print()).andExpect(MockMvcResultMatchers.view().name("redirect:/ruleName/list"));
 	}
 
 }

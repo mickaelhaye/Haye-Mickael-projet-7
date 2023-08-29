@@ -1,6 +1,7 @@
 package com.nnk.springboot.ControllerTests;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -27,6 +28,9 @@ import com.nnk.springboot.services.UserService;
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest
 class UserControllerTest {
+	private User user = new User();
+	private User userTest = new User();
+
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -38,11 +42,17 @@ class UserControllerTest {
 	 */
 	@BeforeEach
 	public void setUp() {
-		User user = new User();
-		user.setFullname("newFullname");
-		user.setUsername("newUsername");
-		user.setPassword("Info06/17");
+		user.setFullname("newFullname2");
+		user.setUsername("newUsername2");
+		user.setPassword("Info06/18");
+		user.setRole("ROLE_USER");
 		userService.addUser(user);
+
+		userTest.setFullname("newFullname");
+		userTest.setUsername("newUsername");
+		userTest.setPassword("Info06/17");
+		userTest.setRole("ROLE_ADMIN");
+		userService.addUser(userTest);
 
 	}
 
@@ -53,7 +63,7 @@ class UserControllerTest {
 	 */
 	@Test
 	void homeTest() throws Exception {
-		mockMvc.perform(get("/user/list")).andExpect(status().isOk()).andDo(print())
+		mockMvc.perform(get("/user/list").with(user(userTest))).andExpect(status().isOk()).andDo(print())
 				.andExpect(MockMvcResultMatchers.view().name("user/list"))
 				.andExpect(MockMvcResultMatchers.model().attributeExists("users"))
 				.andExpect(MockMvcResultMatchers.content().string(containsString("newFullname")));
@@ -68,7 +78,7 @@ class UserControllerTest {
 	@Test
 	void addUserFormTest() throws Exception {
 
-		mockMvc.perform(get("/user/add")).andExpect(status().isOk()).andDo(print())
+		mockMvc.perform(get("/user/add").with(user(userTest))).andExpect(status().isOk()).andDo(print())
 				.andExpect(MockMvcResultMatchers.view().name("user/add"));
 	}
 
@@ -86,7 +96,7 @@ class UserControllerTest {
 		userAddDto.setPassword("Info06/17");
 		userAddDto.setRole("newRole");
 		userAddDto.setUsername("new");
-		mockMvc.perform(post("/user/validate").flashAttr("userAddDto", userAddDto))
+		mockMvc.perform(post("/user/validate").with(user(userTest)).flashAttr("userAddDto", userAddDto))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(MockMvcResultMatchers.view().name("redirect:/user/list"));
 
@@ -104,10 +114,10 @@ class UserControllerTest {
 	@Test
 	void showUpdateFormTest() throws Exception {
 
-		mockMvc.perform(get("/user/update/0")).andExpect(status().is3xxRedirection()).andDo(print())
-				.andExpect(MockMvcResultMatchers.view().name("redirect:/user/list"));
+		mockMvc.perform(get("/user/update/0").with(user(userTest))).andExpect(status().is3xxRedirection())
+				.andDo(print()).andExpect(MockMvcResultMatchers.view().name("redirect:/user/list"));
 
-		mockMvc.perform(get("/user/update/1")).andExpect(status().isOk()).andDo(print())
+		mockMvc.perform(get("/user/update/1").with(user(userTest))).andExpect(status().isOk()).andDo(print())
 				.andExpect(MockMvcResultMatchers.view().name("user/update"));
 
 	}
@@ -125,13 +135,13 @@ class UserControllerTest {
 		userAddDto.setFullname(user.getFullname());
 		userAddDto.setPassword(user.getPassword());
 		userAddDto.setRole(user.getRole());
-		userAddDto.setUsername("newUsername2");
-		mockMvc.perform(post("/user/update/1").flashAttr("userAddDto", userAddDto))
+		userAddDto.setUsername("newUsername3");
+		mockMvc.perform(post("/user/update/1").with(user(userTest)).flashAttr("userAddDto", userAddDto))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(MockMvcResultMatchers.view().name("redirect:/user/list"));
-		userAddDto.setUsername("newUsername2");
-		mockMvc.perform(post("/user/update/1").flashAttr("userAddDto", userAddDto)).andExpect(status().isOk())
-				.andExpect(MockMvcResultMatchers.view().name("user/update"));
+		userAddDto.setUsername("newUsername3");
+		mockMvc.perform(post("/user/update/1").with(user(userTest)).flashAttr("userAddDto", userAddDto))
+				.andExpect(status().isOk()).andExpect(MockMvcResultMatchers.view().name("user/update"));
 
 	}
 
@@ -143,11 +153,11 @@ class UserControllerTest {
 	 */
 	@Test
 	void deleteUserTest() throws Exception {
-		mockMvc.perform(get("/user/delete/0")).andExpect(status().is3xxRedirection()).andDo(print())
-				.andExpect(MockMvcResultMatchers.view().name("redirect:/user/list"));
+		mockMvc.perform(get("/user/delete/0").with(user(userTest))).andExpect(status().is3xxRedirection())
+				.andDo(print()).andExpect(MockMvcResultMatchers.view().name("redirect:/user/list"));
 
-		mockMvc.perform(get("/user/delete/1")).andExpect(status().is3xxRedirection()).andDo(print())
-				.andExpect(MockMvcResultMatchers.view().name("redirect:/user/list"));
+		mockMvc.perform(get("/user/delete/1").with(user(userTest))).andExpect(status().is3xxRedirection())
+				.andDo(print()).andExpect(MockMvcResultMatchers.view().name("redirect:/user/list"));
 	}
 
 }
