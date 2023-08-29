@@ -2,6 +2,7 @@ package com.nnk.springboot.configuration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -34,26 +35,12 @@ public class SecurityConfiguration {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		logger.debug("securityFilterChain");
 		http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                .requestMatchers("/bidList/*").authenticated()
-                .requestMatchers("/bidList/update/{id}").authenticated()
-                .requestMatchers("/bidList/delete/{id}").authenticated()
-                .requestMatchers("/curvePoint/*").authenticated()
-                .requestMatchers("/curvePoint/update/{id}").authenticated()
-                .requestMatchers("/curvePoint/delete/{id}").authenticated()
-                .requestMatchers("/rating/*").authenticated()
-                .requestMatchers("/rating/update/{id}").authenticated()
-                .requestMatchers("/rating/delete/{id}").authenticated()
-                .requestMatchers("/ruleName/*").authenticated()
-                .requestMatchers("/ruleName/update/{id}").authenticated()
-                .requestMatchers("/ruleName/delete/{id}").authenticated()
-                .requestMatchers("/trade/*").authenticated()
-                .requestMatchers("/trade/update/{id}").authenticated()
-                .requestMatchers("/trade/delete/{id}").authenticated()
-                .requestMatchers("/user/*").permitAll()
-                .requestMatchers("/user/update/{id}").authenticated()
-                .requestMatchers("/user/delete/{id}").authenticated()
-                .requestMatchers("/admin/home").hasRole("ADMIN")
-                .anyRequest().permitAll())
+						.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()		
+		           		.requestMatchers("/").permitAll()
+                		.requestMatchers("/app/secure/article-details").permitAll()
+                		.requestMatchers("/user/*").permitAll()
+                		.requestMatchers("/user/*/*").authenticated()
+                		.anyRequest().hasRole("ADMIN"))
 
                 .formLogin(login -> login.permitAll()
                         .loginPage("/app/login")
