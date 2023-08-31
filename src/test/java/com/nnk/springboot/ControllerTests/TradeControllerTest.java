@@ -1,11 +1,13 @@
 package com.nnk.springboot.ControllerTests;
 
-import static org.hamcrest.CoreMatchers.containsString;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.nnk.springboot.domain.Trade;
 import com.nnk.springboot.domain.User;
@@ -26,10 +27,11 @@ import com.nnk.springboot.services.UserService;
  * @author mickael hayé
  * @version 1.0
  */
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc
 @SpringBootTest
 class TradeControllerTest {
-	private User userTest = new User();
+	private User userTestADMIN = new User();
+	private User userTestUSER = new User();
 	private Trade trade = new Trade();
 
 	@Autowired
@@ -52,11 +54,17 @@ class TradeControllerTest {
 		trade.setBuyQuantity(10d);
 		tradeService.addTrade(trade);
 
-		userTest.setFullname("newFullname");
-		userTest.setUsername("newUsername");
-		userTest.setPassword("Info06/17");
-		userTest.setRole("ROLE_ADMIN");
-		userService.addUser(userTest);
+		userTestADMIN.setFullname("newFullname");
+		userTestADMIN.setUsername("newUsernameADMIN");
+		userTestADMIN.setPassword("Info06/17");
+		userTestADMIN.setRole("ROLE_ADMIN");
+		userService.addUser(userTestADMIN);
+
+		userTestUSER.setFullname("newFullname");
+		userTestUSER.setUsername("newUsernameUSER");
+		userTestUSER.setPassword("Info06/17");
+		userTestUSER.setRole("ROLE_USER");
+		userService.addUser(userTestUSER);
 	}
 
 	/**
@@ -66,12 +74,12 @@ class TradeControllerTest {
 	 */
 	@Test
 	void homeTest() throws Exception {
-		mockMvc.perform(get("/trade/list").with(user(userTest))).andExpect(status().isOk()).andDo(print())
-				.andExpect(MockMvcResultMatchers.view().name("trade/list"))
-				.andExpect(MockMvcResultMatchers.model().attributeExists("trades"))
-				.andExpect(MockMvcResultMatchers.model().attributeExists("httpServletRequest"))
-				.andExpect(MockMvcResultMatchers.content().string(containsString("newAccount")));
+		mockMvc.perform(get("/trade/list").with(user(userTestADMIN))).andExpect(status().isOk()).andDo(print())
+				.andExpect(view().name("trade/list")).andExpect(model().attributeExists("trades"))
+				.andExpect(model().attributeExists("httpServletRequest"));
 
+		mockMvc.perform(get("/trade/list").with(user(userTestUSER))).andExpect(status().is4xxClientError())
+				.andDo(print());
 	}
 
 	/**
@@ -83,8 +91,11 @@ class TradeControllerTest {
 	@Test
 	void addTradeFormTest() throws Exception {
 
-		mockMvc.perform(get("/trade/add").with(user(userTest))).andExpect(status().isOk()).andDo(print())
-				.andExpect(MockMvcResultMatchers.view().name("trade/add"));
+		mockMvc.perform(get("/trade/add").with(user(userTestADMIN))).andExpect(status().isOk()).andDo(print())
+				.andExpect(view().name("trade/add"));
+
+		mockMvc.perform(get("/trade/add").with(user(userTestUSER))).andExpect(status().is4xxClientError())
+				.andDo(print());
 	}
 
 	/**
@@ -95,8 +106,11 @@ class TradeControllerTest {
 	 */
 	@Test
 	void validateTest() throws Exception {
-		mockMvc.perform(post("/trade/validate").with(user(userTest))).andExpect(status().is3xxRedirection())
-				.andExpect(MockMvcResultMatchers.view().name("redirect:/trade/list"));
+		mockMvc.perform(post("/trade/validate").with(user(userTestADMIN)).with(csrf()))
+				.andExpect(status().is3xxRedirection()).andDo(print()).andExpect(view().name("redirect:/trade/list"));
+
+		mockMvc.perform(post("/trade/validate").with(user(userTestUSER)).with(csrf()))
+				.andExpect(status().is4xxClientError()).andDo(print());
 	}
 
 	/**
@@ -108,11 +122,18 @@ class TradeControllerTest {
 	@Test
 	void showUpdateFormTest() throws Exception {
 
-		mockMvc.perform(get("/trade/update/0").with(user(userTest))).andExpect(status().is3xxRedirection())
-				.andDo(print()).andExpect(MockMvcResultMatchers.view().name("redirect:/trade/list"));
+		mockMvc.perform(get("/trade/update/0").with(user(userTestADMIN))).andExpect(status().is3xxRedirection())
+				.andDo(print()).andExpect(view().name("redirect:/trade/list"));
 
-		mockMvc.perform(get("/trade/update/1").with(user(userTest))).andExpect(status().isOk()).andDo(print())
-				.andExpect(MockMvcResultMatchers.view().name("trade/update"));
+		mockMvc.perform(get("/trade/update/1").with(user(userTestADMIN))).andExpect(status().isOk()).andDo(print())
+				.andExpect(view().name("trade/update"));
+
+		mockMvc.perform(get("/trade/update/0").with(user(userTestUSER))).andExpect(status().is4xxClientError())
+				.andDo(print());
+
+		mockMvc.perform(get("/trade/update/1").with(user(userTestUSER))).andExpect(status().is4xxClientError())
+				.andDo(print());
+
 	}
 
 	/**
@@ -123,8 +144,11 @@ class TradeControllerTest {
 	 */
 	@Test
 	void updateTradeTest() throws Exception {
-		mockMvc.perform(post("/trade/update/1").with(user(userTest))).andExpect(status().is3xxRedirection())
-				.andExpect(MockMvcResultMatchers.view().name("redirect:/trade/list"));
+		mockMvc.perform(post("/trade/update/1").with(user(userTestADMIN)).with(csrf()))
+				.andExpect(status().is3xxRedirection()).andDo(print()).andExpect(view().name("redirect:/trade/list"));
+
+		mockMvc.perform(post("/trade/update/1").with(user(userTestUSER)).with(csrf()))
+				.andExpect(status().is4xxClientError()).andDo(print());
 	}
 
 	/**
@@ -135,11 +159,17 @@ class TradeControllerTest {
 	 */
 	@Test
 	void deleteTradeTest() throws Exception {
-		mockMvc.perform(get("/trade/delete/0").with(user(userTest))).andExpect(status().is3xxRedirection())
-				.andDo(print()).andExpect(MockMvcResultMatchers.view().name("redirect:/trade/list"));
+		mockMvc.perform(get("/trade/delete/0").with(user(userTestADMIN))).andExpect(status().is3xxRedirection())
+				.andDo(print()).andExpect(view().name("redirect:/trade/list"));
 
-		mockMvc.perform(get("/trade/delete/1").with(user(userTest))).andExpect(status().is3xxRedirection())
-				.andDo(print()).andExpect(MockMvcResultMatchers.view().name("redirect:/trade/list"));
+		mockMvc.perform(get("/trade/delete/1").with(user(userTestADMIN))).andExpect(status().is3xxRedirection())
+				.andDo(print()).andExpect(view().name("redirect:/trade/list"));
+
+		mockMvc.perform(get("/trade/delete/0").with(user(userTestUSER))).andExpect(status().is4xxClientError())
+				.andDo(print());
+
+		mockMvc.perform(get("/trade/delete/1").with(user(userTestUSER))).andExpect(status().is4xxClientError())
+				.andDo(print());
 	}
 
 }

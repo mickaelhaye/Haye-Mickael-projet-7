@@ -4,6 +4,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.nnk.springboot.domain.User;
 import com.nnk.springboot.services.UserService;
@@ -25,7 +25,8 @@ import com.nnk.springboot.services.UserService;
 @AutoConfigureMockMvc()
 @SpringBootTest
 class LoginControllerTest {
-	private User userTest = new User();
+	private User userTestADMIN = new User();
+	private User userTestUSER = new User();
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -34,16 +35,16 @@ class LoginControllerTest {
 	private UserService userService;
 
 	/**
-	 * this method is to add a User in the dataBase
+	 * this method is to add some Users in the dataBase
 	 */
 	@BeforeEach
 	public void setUp() {
 
-		userTest.setFullname("newFullname");
-		userTest.setUsername("newUsername");
-		userTest.setPassword("Info06/17");
-		userTest.setRole("ROLE_ADMIN");
-		userService.addUser(userTest);
+		userTestUSER.setFullname("newFullname");
+		userTestUSER.setUsername("newUsernameUSER");
+		userTestUSER.setPassword("Info06/17");
+		userTestUSER.setRole("ROLE_USER");
+		userService.addUser(userTestUSER);
 	}
 
 	/**
@@ -53,8 +54,7 @@ class LoginControllerTest {
 	 */
 	@Test
 	void loginTest() throws Exception {
-		mockMvc.perform(get("/app/login").with(user(userTest))).andExpect(status().isOk()).andDo(print())
-				.andExpect(MockMvcResultMatchers.view().name("login"));
+		mockMvc.perform(get("/app/login")).andExpect(status().isOk()).andDo(print()).andExpect(view().name("login"));
 	}
 
 	/**
@@ -65,8 +65,10 @@ class LoginControllerTest {
 	 */
 	@Test
 	void loginSuccessTest() throws Exception {
-		mockMvc.perform(get("/app/login_success").with(user(userTest))).andExpect(status().isOk()).andDo(print())
-				.andExpect(MockMvcResultMatchers.view().name("login_success"));
+		mockMvc.perform(get("/app/login_success").with(user(userTestUSER))).andExpect(status().isOk()).andDo(print())
+				.andExpect(view().name("login_success"));
+		mockMvc.perform(get("/app/login_success")).andExpect(status().is3xxRedirection()).andDo(print());
+
 	}
 
 	/**
@@ -77,8 +79,8 @@ class LoginControllerTest {
 	 */
 	@Test
 	void loginErrorTest() throws Exception {
-		mockMvc.perform(get("/app/login_error").with(user(userTest))).andExpect(status().isOk()).andDo(print())
-				.andExpect(MockMvcResultMatchers.view().name("login_error"));
+		mockMvc.perform(get("/app/login_error")).andExpect(status().isOk()).andDo(print())
+				.andExpect(view().name("login_error"));
 	}
 
 	/**
@@ -89,8 +91,8 @@ class LoginControllerTest {
 	 */
 	@Test
 	void getAllUserArticlesTest() throws Exception {
-		mockMvc.perform(get("/app/secure/article-details").with(user(userTest))).andExpect(status().isOk())
-				.andDo(print()).andExpect(MockMvcResultMatchers.view().name("user/list"));
+		mockMvc.perform(get("/app/secure/article-details")).andExpect(status().isOk()).andDo(print())
+				.andExpect(view().name("user/list"));
 	}
 
 	/**
@@ -100,7 +102,6 @@ class LoginControllerTest {
 	 */
 	@Test
 	void errorTest() throws Exception {
-		mockMvc.perform(get("/app/error").with(user(userTest))).andExpect(status().isOk()).andDo(print())
-				.andExpect(MockMvcResultMatchers.view().name("403"));
+		mockMvc.perform(get("/app/error")).andExpect(status().isOk()).andDo(print()).andExpect(view().name("403"));
 	}
 }

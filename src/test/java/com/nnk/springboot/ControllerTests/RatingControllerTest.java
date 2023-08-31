@@ -1,11 +1,13 @@
 package com.nnk.springboot.ControllerTests;
 
-import static org.hamcrest.CoreMatchers.containsString;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,10 +28,11 @@ import com.nnk.springboot.services.UserService;
  * @author mickael hayé
  * @version 1.0
  */
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc
 @SpringBootTest
 class RatingControllerTest {
-	private User userTest = new User();
+	private User userTestADMIN = new User();
+	private User userTestUSER = new User();
 	private Rating rating = new Rating();
 
 	@Autowired
@@ -46,17 +49,24 @@ class RatingControllerTest {
 	 */
 	@BeforeEach
 	public void setUp() {
+
 		rating.setMoodysRating("newMoodysRating");
 		rating.setSandPRating("newSandPrating");
 		rating.setFitchRating("newFitchPrating");
 		rating.setOrder(3);
 		ratingService.addRating(rating);
 
-		userTest.setFullname("newFullname");
-		userTest.setUsername("newUsername");
-		userTest.setPassword("Info06/17");
-		userTest.setRole("ROLE_ADMIN");
-		userService.addUser(userTest);
+		userTestADMIN.setFullname("newFullname");
+		userTestADMIN.setUsername("newUsernameADMIN");
+		userTestADMIN.setPassword("Info06/17");
+		userTestADMIN.setRole("ROLE_ADMIN");
+		userService.addUser(userTestADMIN);
+
+		userTestUSER.setFullname("newFullname");
+		userTestUSER.setUsername("newUsernameUSER");
+		userTestUSER.setPassword("Info06/17");
+		userTestUSER.setRole("ROLE_USER");
+		userService.addUser(userTestUSER);
 	}
 
 	/**
@@ -66,11 +76,12 @@ class RatingControllerTest {
 	 */
 	@Test
 	void homeTest() throws Exception {
-		mockMvc.perform(get("/rating/list").with(user(userTest))).andExpect(status().isOk()).andDo(print())
-				.andExpect(MockMvcResultMatchers.view().name("rating/list"))
-				.andExpect(MockMvcResultMatchers.model().attributeExists("ratings"))
-				.andExpect(MockMvcResultMatchers.model().attributeExists("httpServletRequest"))
-				.andExpect(MockMvcResultMatchers.content().string(containsString("newSandPrating")));
+		mockMvc.perform(get("/rating/list").with(user(userTestADMIN))).andExpect(status().isOk()).andDo(print())
+				.andExpect(view().name("rating/list")).andExpect(model().attributeExists("ratings"))
+				.andExpect(model().attributeExists("httpServletRequest"));
+
+		mockMvc.perform(get("/rating/list").with(user(userTestUSER))).andExpect(status().is4xxClientError())
+				.andDo(print());
 	}
 
 	/**
@@ -82,8 +93,11 @@ class RatingControllerTest {
 	@Test
 	void addRatingFormTest() throws Exception {
 
-		mockMvc.perform(get("/rating/add").with(user(userTest))).andExpect(status().isOk()).andDo(print())
-				.andExpect(MockMvcResultMatchers.view().name("rating/add"));
+		mockMvc.perform(get("/rating/add").with(user(userTestADMIN))).andExpect(status().isOk()).andDo(print())
+				.andExpect(view().name("rating/add"));
+
+		mockMvc.perform(get("/rating/add").with(user(userTestUSER))).andExpect(status().is4xxClientError())
+				.andDo(print());
 	}
 
 	/**
@@ -94,8 +108,11 @@ class RatingControllerTest {
 	 */
 	@Test
 	void validateTest() throws Exception {
-		mockMvc.perform(post("/rating/validate").with(user(userTest))).andExpect(status().is3xxRedirection())
-				.andExpect(MockMvcResultMatchers.view().name("redirect:/rating/list"));
+		mockMvc.perform(post("/rating/validate").with(user(userTestADMIN)).with(csrf()))
+				.andExpect(status().is3xxRedirection()).andDo(print()).andExpect(view().name("redirect:/rating/list"));
+
+		mockMvc.perform(post("/rating/validate").with(user(userTestUSER)).with(csrf()))
+				.andExpect(status().is4xxClientError()).andDo(print());
 	}
 
 	/**
@@ -107,11 +124,17 @@ class RatingControllerTest {
 	@Test
 	void showUpdateFormTest() throws Exception {
 
-		mockMvc.perform(get("/rating/update/0").with(user(userTest))).andExpect(status().is3xxRedirection())
+		mockMvc.perform(get("/rating/update/0").with(user(userTestADMIN))).andExpect(status().is3xxRedirection())
 				.andDo(print()).andExpect(MockMvcResultMatchers.view().name("redirect:/rating/list"));
 
-		mockMvc.perform(get("/rating/update/1").with(user(userTest))).andExpect(status().isOk()).andDo(print())
-				.andExpect(MockMvcResultMatchers.view().name("rating/update"));
+		mockMvc.perform(get("/rating/update/1").with(user(userTestADMIN))).andExpect(status().isOk()).andDo(print())
+				.andExpect(view().name("rating/update"));
+
+		mockMvc.perform(get("/rating/update/0").with(user(userTestUSER))).andExpect(status().is4xxClientError())
+				.andDo(print());
+
+		mockMvc.perform(get("/rating/update/1").with(user(userTestUSER))).andExpect(status().is4xxClientError())
+				.andDo(print());
 
 	}
 
@@ -123,9 +146,11 @@ class RatingControllerTest {
 	 */
 	@Test
 	void updateRatingTest() throws Exception {
-		mockMvc.perform(post("/rating/update/1").with(user(userTest))).andExpect(status().is3xxRedirection())
-				.andExpect(MockMvcResultMatchers.view().name("redirect:/rating/list"));
+		mockMvc.perform(post("/rating/update/1").with(user(userTestADMIN)).with(csrf()))
+				.andExpect(status().is3xxRedirection()).andDo(print()).andExpect(view().name("redirect:/rating/list"));
 
+		mockMvc.perform(post("/rating/update/1").with(user(userTestUSER)).with(csrf()))
+				.andExpect(status().is4xxClientError()).andDo(print());
 	}
 
 	/**
@@ -136,12 +161,17 @@ class RatingControllerTest {
 	 */
 	@Test
 	void deleteRatingTest() throws Exception {
+		mockMvc.perform(get("/rating/delete/0").with(user(userTestADMIN))).andExpect(status().is3xxRedirection())
+				.andDo(print()).andExpect(view().name("redirect:/rating/list"));
 
-		mockMvc.perform(get("/rating/delete/0").with(user(userTest))).andExpect(status().is3xxRedirection())
-				.andDo(print()).andExpect(MockMvcResultMatchers.view().name("redirect:/rating/list"));
+		mockMvc.perform(get("/rating/delete/1").with(user(userTestADMIN))).andExpect(status().is3xxRedirection())
+				.andDo(print()).andExpect(view().name("redirect:/rating/list"));
 
-		mockMvc.perform(get("/rating/delete/1").with(user(userTest))).andExpect(status().is3xxRedirection())
-				.andDo(print()).andExpect(MockMvcResultMatchers.view().name("redirect:/rating/list"));
+		mockMvc.perform(get("/rating/delete/0").with(user(userTestUSER))).andExpect(status().is4xxClientError())
+				.andDo(print());
+
+		mockMvc.perform(get("/rating/delete/1").with(user(userTestUSER))).andExpect(status().is4xxClientError())
+				.andDo(print());
 	}
 
 }
