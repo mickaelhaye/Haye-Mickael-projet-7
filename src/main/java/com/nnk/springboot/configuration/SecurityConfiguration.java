@@ -40,6 +40,8 @@ public class SecurityConfiguration {
                 		.requestMatchers("/app/secure/article-details").permitAll()
                 		.requestMatchers("/user/*").permitAll()
                 		.requestMatchers("/user/*/*").authenticated()
+                		.requestMatchers("/app/login_success").authenticated()
+                		.requestMatchers("/app/error").permitAll()
                 		.anyRequest().hasRole("ADMIN"))
 
                 .formLogin(login -> login.permitAll()
