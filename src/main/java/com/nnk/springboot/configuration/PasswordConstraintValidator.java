@@ -55,7 +55,7 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
 
 		PasswordValidator validator = new PasswordValidator(resolver, Arrays.asList(
 
-				// length between 8 and 16 characters
+				// at least 8 characters
 				new LengthRule(8, 999),
 
 				// at least one upper-case character
