@@ -1,12 +1,45 @@
 package com.nnk.springboot.domain;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
+import org.hibernate.annotations.DynamicUpdate;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * this class is the entity Rating.
+ * 
+ * @author mickael hayé
+ * @version 1.0
+ */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
+@DynamicUpdate
 @Table(name = "rating")
 public class Rating {
-    // TODO: Map columns in data table RATING with corresponding java fields
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private int id;
+
+	@Column(name = "moodys_rating")
+	private String moodysRating;
+
+	@Column(name = "sand_p_rating")
+	private String sandPRating;
+
+	@Column(name = "fitch_rating")
+	private String fitchRating;
+
+	@Column(name = "order_number")
+	private Integer order;
 }

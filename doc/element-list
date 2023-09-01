@@ -1,0 +1,11 @@
+com.nnk.springboot
+com.nnk.springboot.annotation
+com.nnk.springboot.configuration
+com.nnk.springboot.controllers
+com.nnk.springboot.ControllerTests
+com.nnk.springboot.domain
+com.nnk.springboot.domain.dto
+com.nnk.springboot.repositories
+com.nnk.springboot.services
+com.nnk.springboot.services.impl
+com.nnk.springboot.ServiceTests

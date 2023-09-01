@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8" />
+	<title>Login Error</title>
+	<link rel="stylesheet" href="../../css/bootstrap.min.css">
+</head>
+
+<body>
+	<div class="row" style="max-width: 400px; margin: 0 auto;">
+		<h1>Login Error!</h1>
+	</div>
+	<div class="row" style="max-width: 400px; margin: 0 auto;">
+		<div class="col">
+			<form th:action="@{/app/login}">
+				<input type="submit" value="Login" />
+			</form>
+		</div>
+		<div class="col">
+			<form th:action="@{/}">
+				<input type="submit" value="Home" />
+			</form>
+		</div>
+	</div>
+</body>
+
+</html>
