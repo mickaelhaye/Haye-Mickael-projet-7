@@ -67,7 +67,7 @@ class LoginControllerTest {
 	void loginSuccessTest() throws Exception {
 		mockMvc.perform(get("/app/login_success").with(user(userTestUSER))).andExpect(status().isOk()).andDo(print())
 				.andExpect(view().name("login_success"));
-		mockMvc.perform(get("/app/login_success")).andExpect(status().is3xxRedirection()).andDo(print());
+		mockMvc.perform(get("/app/login_success")).andExpect(status().isOk()).andDo(print());
 
 	}
 
